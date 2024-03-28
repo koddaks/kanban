@@ -27,7 +27,8 @@ function App() {
 
   useEffect(() => {
     fetchRepoData(repoUrl, SearchState.All)
-  }, [])
+    console.log('fetch');
+  }, [repoUrl])
 
   return (
     <>
