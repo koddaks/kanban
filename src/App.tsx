@@ -16,11 +16,11 @@ function App() {
   const repoData = useStore((state) => state.repoData)
   console.log(repoData)
 
-  const closedIssues = repoData.filter((data) => data.state === SearchState.Closed);
-  console.log(closedIssues);
+  // const closedIssues = repoData.filter((data) => data.state === SearchState.Closed);
+  // console.log(closedIssues);
 
-  const openIssues = repoData.filter((data) => data.state === SearchState.Open);
-  console.log(openIssues);
+  // const openIssues = repoData.filter((data) => data.state === SearchState.Open);
+  // console.log(openIssues);
 
 
   const handleIncreaseCount = () => {
