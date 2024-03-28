@@ -2,7 +2,6 @@ import { Issue, SearchState } from '@/types'
 import { create } from 'zustand'
 import { devtools, persist } from 'zustand/middleware'
 
-
 interface StoreState {
   count: number
   increaseCount: (by: number) => void

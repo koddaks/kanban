@@ -6,7 +6,6 @@ import useStore from './store'
 import { useEffect } from 'react'
 import { SearchState } from './types'
 
-
 function App() {
   const repoUrl = 'https://api.github.com/repos/facebook/react'
 
@@ -21,7 +20,6 @@ function App() {
 
   // const openIssues = repoData.filter((data) => data.state === SearchState.Open);
   // console.log(openIssues);
-
 
   const handleIncreaseCount = () => {
     increaseCount(1)
