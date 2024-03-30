@@ -1,11 +1,9 @@
-import { Issue, SearchState } from '@/types'
+import { Issue, IssueState } from '@/types'
 import { create } from 'zustand'
 import { devtools, persist } from 'zustand/middleware'
 
 interface StoreState {
-  count: number
-  increaseCount: (by: number) => void
-  fetchRepoData: (repoUrl: string, searchState: SearchState) => Promise<void>
+  fetchRepoData: (repoUrl: string, IssueState: IssueState) => Promise<void>
   repoData: Issue[]
 }
 
@@ -13,15 +11,13 @@ const useStore = create<StoreState>()(
   devtools(
     persist(
       (set) => ({
-        count: 0,
         repoData: [],
-        increaseCount: (by) => set((state) => ({ count: state.count + by })),
-        async fetchRepoData(repoUrl: string, searchState: SearchState) {
+        async fetchRepoData(repoUrl: string, IssueState: IssueState) {
           try {
             const queryParams = new URLSearchParams({
-              per_page: '60',
+              per_page: '30',
               direction: 'desc',
-              state: `${searchState}`,
+              state: `${IssueState}`,
             })
             const url = `${repoUrl}/issues?${queryParams}`
 
