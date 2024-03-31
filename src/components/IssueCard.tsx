@@ -8,7 +8,7 @@ type IssueCardProps = {
 
 export function IssueCard({ data }: IssueCardProps) {
   return (
-    <Card className="bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 duration-500 hover:scale-105 hover:from-pink-500 hover:to-yellow-500">
+    <Card className="flex max-w-[360px] flex-col items-center bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 duration-500 hover:scale-105 hover:from-pink-500 hover:to-yellow-500">
       <CardHeader>
         <a href={data.html_url} target="_blank" rel="noopener noreferrer">
           <CardTitle>{data.title}</CardTitle>

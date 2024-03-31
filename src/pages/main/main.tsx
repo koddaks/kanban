@@ -1,5 +1,4 @@
 import { ColumnContainer } from '@/components/ColumnContainer'
-import { InputWithButton } from '@/components/InputWithButton'
 import useStore from '@/store/index'
 import { Issue, IssueState } from '@/types'
 
@@ -20,7 +19,7 @@ export function Main() {
 
   return (
     <>
-      <div className="flex w-full border-collapse rounded-lg border-2 border-solid border-indigo-600 bg-slate-300 p-[20px]">
+      <div className="flex w-full border-collapse gap-4 rounded-lg border-2 border-solid border-indigo-600 bg-slate-300 p-[20px]">
         <ColumnContainer column="ToDo" issues={todoIssues} />
         <ColumnContainer column="In Progress" issues={InProgressIssues} />
         <ColumnContainer column="Done" issues={doneIssues} />

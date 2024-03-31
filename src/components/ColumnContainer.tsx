@@ -18,14 +18,12 @@ type ColumnContainerProps = {
 
 export function ColumnContainer({ column, issues }: ColumnContainerProps) {
   return (
-    <Table className="w-1/3">
-      <TableHead>{column}</TableHead>
-      <TableBody>{issues?.map((issue) => <IssueCard data={issue} />)}</TableBody>
-      <TableFooter>
-        <TableRow>
-          <TableCell colSpan={3}>Total</TableCell>
-        </TableRow>
-      </TableFooter>
+    <Table className="flex flex-col items-center ">
+      <TableHead className="text-center">{column}</TableHead>
+      <TableBody className="flex flex-col gap-4">
+        {issues?.map((issue) => <IssueCard data={issue} />)}
+      </TableBody>
+      <TableFooter></TableFooter>
     </Table>
   )
 }

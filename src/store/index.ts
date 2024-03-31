@@ -15,7 +15,7 @@ const useStore = create<StoreState>()(
         async fetchRepoData(repoUrl: string, IssueState: IssueState) {
           try {
             const queryParams = new URLSearchParams({
-              per_page: '30',
+              per_page: '100',
               direction: 'desc',
               state: `${IssueState}`,
             })
