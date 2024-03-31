@@ -19,18 +19,18 @@ export function getTimeStringSinceIssueOpened(createdAt: string): string {
 }
 
 export function modifyGithubUrl(originalUrl: string) {
-  return originalUrl.replace(/github\.com/, 'api.github.com/repos');
+  return originalUrl.replace(/github\.com/, 'api.github.com/repos')
 }
 
 export function extractOwnerAndRepo(url: string) {
-  const regex = /github\.com\/([^/]+)\/([^/]+)/;
-  const matches = url.match(regex);
+  const regex = /github\.com\/([^/]+)\/([^/]+)/
+  const matches = url.match(regex)
 
   if (matches && matches.length === 3) {
-    const owner = matches[1];
-    const repo = matches[2];
-    return { owner, repo };
+    const owner = matches[1]
+    const repo = matches[2]
+    return { owner, repo }
   } else {
-    return null;
+    return null
   }
 }
