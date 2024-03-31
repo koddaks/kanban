@@ -7,14 +7,9 @@ import { Main } from './pages/main/main'
 const API_URL = 'https://api.github.com/repos/facebook/react'
 
 function App() {
-  
-  // const repoUrl = 'https://api.github.com/repos/Georgegriff/react-dnd-kit-tailwind-shadcn-ui'
-  // const repoUrl = 'https://api.github.com/repos/vuejs/vue'
-
-
   const getIssues = useStore((state) => state.getIssues)
   const issues = useStore((state) => state.issues)
-  console.log(issues);
+  console.log(issues)
 
   useEffect(() => {
     getIssues(API_URL, IssueState.All)

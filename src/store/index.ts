@@ -20,8 +20,8 @@ const useIssuesStore = create<StoreState>()(
         closed: [],
         inProgress: [],
         async getIssues(repoUrl: string, IssueState: IssueState) {
-          const data = await getRepositoryIssues(repoUrl, IssueState);
-            set({ issues: data });
+          const data = await getRepositoryIssues(repoUrl, IssueState)
+          set({ issues: data })
         },
       }),
       { name: 'repositoryIssues' }
