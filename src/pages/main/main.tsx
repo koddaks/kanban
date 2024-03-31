@@ -1,26 +1,36 @@
 import { ColumnContainer } from '@/components/ColumnContainer'
 import { InputWithButton } from '@/components/InputWithButton'
-import useStore from '@/store/index'
-import { Issue, IssueState } from '@/types'
+import useIssuesStore from '@/store/index'
+
+import { useEffect } from 'react';
 
 export function Main() {
-  const issues = useStore((state) => state.issues)
+  const issues = useIssuesStore((state) => state.all)
+  const todoIssues = useIssuesStore((state) => state.openedWithAssignee);
+  const InProgressIssues = useIssuesStore((state) => state.inProgress);
+  const doneIssues = useIssuesStore((state) => state.closed);
 
-  const todoIssues = issues.filter((issue: Issue) => {
-    const currentDate = Date.now()
-    const issueDate = new Date(issue.created_at).getTime()
-    const threeDaysAgo = currentDate - 3 * 24 * 60 * 60 * 1000
 
-    return issueDate >= threeDaysAgo && issue.state !== IssueState.Closed ? issue : null
-  })
+  const getTodoIssues = useIssuesStore((state) => state.getOpenedIssuesWithAssignee);
+  const getInProgressIssues = useIssuesStore((state) => state.getInProgressIssues);
+  const geDoneIssues = useIssuesStore((state) => state.getClosedIssues);
 
-  const InProgressIssues = issues.filter((issue) => IssueState.Open && issue.assignee !== null)
+  useEffect(() => {
+    getTodoIssues(issues)
+    getInProgressIssues(issues)
+    geDoneIssues(issues)
+  }, [])
 
-  const doneIssues = issues.filter((issue) => issue.state === IssueState.Closed)
+  useEffect(() => {
+    getTodoIssues(issues)
+    getInProgressIssues(issues)
+    geDoneIssues(issues)
+  }, [issues])
+
 
   return (
     <main>
-      <InputWithButton />
+      <InputWithButton/>
       <div className="flex border-collapse gap-4 rounded-lg border-2 border-solid border-indigo-600 bg-slate-300 p-[20px]">
         <ColumnContainer column="ToDo" issues={todoIssues} />
         <ColumnContainer column="In Progress" issues={InProgressIssues} />
