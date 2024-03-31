@@ -1,13 +1,14 @@
+import { modifyGithubUrl } from '@/lib/utils'
 import { Issue, IssueState } from '@/types'
 
-export const getRepositoryIssues = async (repoUrl: string, IssueState: IssueState) => {
+export const getAllRepositoryIssues = async (repoUrl: string) => {
   try {
     const queryParams = new URLSearchParams({
       per_page: '100',
       direction: 'desc',
-      state: `${IssueState}`,
+      state: `${IssueState.All}`,
     })
-    const url = `${repoUrl}/issues?${queryParams}`
+    const url = `${modifyGithubUrl(repoUrl)}/issues?${queryParams}`
 
     const response = await fetch(url, {
       headers: {
