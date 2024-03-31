@@ -14,7 +14,7 @@ export function ColumnContainer({ column, issues }: ColumnContainerProps) {
       <TableHead className="text-center">{column}</TableHead>
       <TableBody className="flex flex-col gap-4">
         <ScrollArea className="h-[80vh] min-w-[360px] rounded-md border p-4">
-          {issues?.map((issue) => <IssueCard data={issue} />)}
+          {issues?.map((issue) => <IssueCard key={issue.id} data={issue} />)}
         </ScrollArea>
       </TableBody>
       <TableFooter></TableFooter>
