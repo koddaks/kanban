@@ -1,30 +1,53 @@
 import { Issue, IssueState } from '@/types'
 import { create } from 'zustand'
 import { devtools, persist } from 'zustand/middleware'
-import { getRepositoryIssues } from './api'
+import { getAllRepositoryIssues } from './api'
 
 interface StoreState {
-  getIssues: (repoUrl: string, IssueState: IssueState) => Promise<void>
-  issues: Issue[]
-  opened: Issue[]
+  getAllIssues: (repoUrl: string) => Promise<void>
+  all: Issue[]
+  openedWithAssignee: Issue[]
   closed: Issue[]
   inProgress: Issue[]
+  getOpenedIssuesWithAssignee: (issues: Issue[]) => void
+  getClosedIssues: (issues: Issue[]) => void
+  getInProgressIssues: (issues: Issue[]) => void
 }
 
 const useIssuesStore = create<StoreState>()(
   devtools(
     persist(
       (set) => ({
-        issues: [],
-        opened: [],
+        all: [],
+        openedWithAssignee: [],
         closed: [],
         inProgress: [],
-        async getIssues(repoUrl: string, IssueState: IssueState) {
-          const data = await getRepositoryIssues(repoUrl, IssueState)
-          set({ issues: data })
+        async getAllIssues(repoUrl: string) {
+          const data = await getAllRepositoryIssues(repoUrl)
+          set({ all: data })
+        },
+        getOpenedIssuesWithAssignee: (issues) => {
+          const currentDate = Date.now()
+          const threeDaysAgo = currentDate - 3 * 24 * 60 * 60 * 1000
+
+          const openedIssues = issues.filter((issue: Issue) => {
+            const issueDate = new Date(issue.created_at).getTime()
+            return issueDate >= threeDaysAgo && issue.state !== IssueState.Closed
+          })
+          set({ openedWithAssignee: openedIssues })
+        },
+        getClosedIssues: (issues) => {
+          const closedIssues = issues.filter((issue: Issue) => issue.state === IssueState.Closed)
+          set({ closed: closedIssues })
+        },
+        getInProgressIssues: (issues) => {
+          const inProgressIssues = issues.filter(
+            (issue: Issue) => issue.state === IssueState.Open && issue.assignee !== null
+          )
+          set({ inProgress: inProgressIssues })
         },
       }),
-      { name: 'repositoryIssues' }
+      { name: 'repository-issues' }
     )
   )
 )
