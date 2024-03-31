@@ -12,12 +12,12 @@ function App() {
   // const repoUrl = 'https://api.github.com/repos/vuejs/vue'
 
 
-  const fetchIssuesData = useStore((state) => state.fetchIssuesData)
+  const getIssues = useStore((state) => state.getIssues)
   const issues = useStore((state) => state.issues)
   console.log(issues);
 
   useEffect(() => {
-    fetchIssuesData(API_URL, IssueState.All)
+    getIssues(API_URL, IssueState.All)
   }, [API_URL])
 
   return <Main />
