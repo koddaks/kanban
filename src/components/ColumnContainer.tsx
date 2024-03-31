@@ -1,12 +1,8 @@
 import {
   Table,
   TableBody,
-  TableCaption,
-  TableCell,
   TableFooter,
-  TableHead,
-  TableHeader,
-  TableRow,
+  TableHead, 
 } from '@/components/ui/table'
 import { IssueCard } from './IssueCard'
 import { Issue } from '@/types'
