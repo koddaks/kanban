@@ -1,6 +1,6 @@
 import { Issue } from '@/types'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from './ui/card'
-import { differenceInDays } from '@/lib/utils'
+import { getTimeStringSinceIssueOpened } from '@/lib/utils'
 
 type IssueCardProps = {
   data: Issue
@@ -13,7 +13,7 @@ export function IssueCard({ data }: IssueCardProps) {
         <a href={data.html_url} target="_blank" rel="noopener noreferrer">
           <CardTitle>{data.title}</CardTitle>
           <CardDescription>
-            #{data.number} opened {differenceInDays(data.created_at)}
+            #{data.number} opened {getTimeStringSinceIssueOpened(data.created_at)}
           </CardDescription>
         </a>
         <CardDescription className="flex flex-col items-center">

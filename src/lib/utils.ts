@@ -5,7 +5,7 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export function differenceInDays(createdAt: string): string {
+export function getTimeStringSinceIssueOpened(createdAt: string): string {
   const postDate = new Date(createdAt)
 
   const currentDate = new Date()
