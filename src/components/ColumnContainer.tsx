@@ -10,6 +10,7 @@ import {
 } from '@/components/ui/table'
 import { IssueCard } from './IssueCard'
 import { Issue } from '@/types'
+import { ScrollArea } from "@/components/ui/scroll-area"
 
 type ColumnContainerProps = {
   column: string
@@ -21,7 +22,9 @@ export function ColumnContainer({ column, issues }: ColumnContainerProps) {
     <Table className="flex flex-col items-center ">
       <TableHead className="text-center">{column}</TableHead>
       <TableBody className="flex flex-col gap-4">
+        <ScrollArea className='h-[80vh] rounded-md border p-4 min-w-[360px]'>
         {issues?.map((issue) => <IssueCard data={issue} />)}
+        </ScrollArea>       
       </TableBody>
       <TableFooter></TableFooter>
     </Table>
