@@ -3,16 +3,20 @@ import { create } from 'zustand'
 import { devtools, persist } from 'zustand/middleware'
 
 interface StoreState {
-  fetchRepoData: (repoUrl: string, IssueState: IssueState) => Promise<void>
-  repoData: Issue[]
+  fetchIssuesData: (repoUrl: string, IssueState: IssueState) => Promise<void>
+  issues: Issue[]
+  opened: Issue[]
+  closed: Issue[]
 }
 
-const useStore = create<StoreState>()(
+const useIssuesStore = create<StoreState>()(
   devtools(
     persist(
       (set) => ({
-        repoData: [],
-        async fetchRepoData(repoUrl: string, IssueState: IssueState) {
+        issues: [],
+        opened: [],
+        closed: [],
+        async fetchIssuesData(repoUrl: string, IssueState: IssueState) {
           try {
             const queryParams = new URLSearchParams({
               per_page: '100',
@@ -30,7 +34,7 @@ const useStore = create<StoreState>()(
               throw new Error('Network response was not ok')
             }
             const data: Issue[] = await response.json()
-            set({ repoData: data })
+            set({ issues: data })
           } catch (error) {
             console.error('Error fetching data:', error)
           }
@@ -41,4 +45,4 @@ const useStore = create<StoreState>()(
   )
 )
 
-export default useStore
+export default useIssuesStore
