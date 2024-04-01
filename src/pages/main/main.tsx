@@ -1,5 +1,6 @@
 import { ColumnContainer } from '@/components/ColumnContainer'
 import { InputWithButton } from '@/components/InputWithButton'
+import { KanbanBoard } from '@/components/KabanBoard'
 import useIssuesStore from '@/store/index'
 
 import { useEffect } from 'react'
@@ -29,11 +30,11 @@ export function Main() {
   return (
     <main>
       <InputWithButton />
-      <div className="flex border-collapse gap-4 rounded-lg border-2 border-solid border-indigo-600 bg-slate-300 p-[20px]">
+      <KanbanBoard>
         <ColumnContainer column="ToDo" issues={todoIssues} />
         <ColumnContainer column="In Progress" issues={InProgressIssues} />
         <ColumnContainer column="Done" issues={doneIssues} />
-      </div>
+      </KanbanBoard>
     </main>
   )
 }
