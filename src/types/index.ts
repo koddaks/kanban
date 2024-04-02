@@ -59,7 +59,7 @@ export interface Issue {
   state_reason: string | null
 }
 
-export enum SearchState {
+export enum IssueState {
   All = 'all',
   Open = 'open',
   Closed = 'closed',

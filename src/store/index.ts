@@ -1,48 +1,55 @@
-import { Issue, SearchState } from '@/types'
+import { Issue, IssueState } from '@/types'
 import { create } from 'zustand'
 import { devtools, persist } from 'zustand/middleware'
+import { getAllRepositoryIssues } from './api'
 
 interface StoreState {
-  count: number
-  increaseCount: (by: number) => void
-  fetchRepoData: (repoUrl: string, searchState: SearchState) => Promise<void>
-  repoData: Issue[]
+  getAllIssues: (repoUrl: string) => Promise<void>
+  all: Issue[]
+  openedWithAssignee: Issue[]
+  closed: Issue[]
+  inProgress: Issue[]
+  getOpenedIssuesWithAssignee: (issues: Issue[]) => void
+  getClosedIssues: (issues: Issue[]) => void
+  getInProgressIssues: (issues: Issue[]) => void
 }
 
-const useStore = create<StoreState>()(
+const useIssuesStore = create<StoreState>()(
   devtools(
     persist(
       (set) => ({
-        count: 0,
-        repoData: [],
-        increaseCount: (by) => set((state) => ({ count: state.count + by })),
-        async fetchRepoData(repoUrl: string, searchState: SearchState) {
-          try {
-            const queryParams = new URLSearchParams({
-              per_page: '60',
-              direction: 'desc',
-              state: `${searchState}`,
-            })
-            const url = `${repoUrl}/issues?${queryParams}`
+        all: [],
+        openedWithAssignee: [],
+        closed: [],
+        inProgress: [],
+        async getAllIssues(repoUrl: string) {
+          const data = await getAllRepositoryIssues(repoUrl)
+          set({ all: data })
+        },
+        getOpenedIssuesWithAssignee: (issues) => {
+          const currentDate = Date.now()
+          const threeDaysAgo = currentDate - 3 * 24 * 60 * 60 * 1000
 
-            const response = await fetch(url, {
-              headers: {
-                accept: 'application/vnd.github+json',
-              },
-            })
-            if (!response.ok) {
-              throw new Error('Network response was not ok')
-            }
-            const data: Issue[] = await response.json()
-            set({ repoData: data })
-          } catch (error) {
-            console.error('Error fetching data:', error)
-          }
+          const openedIssues = issues.filter((issue: Issue) => {
+            const issueDate = new Date(issue.created_at).getTime()
+            return issueDate >= threeDaysAgo && issue.state !== IssueState.Closed
+          })
+          set({ openedWithAssignee: openedIssues })
+        },
+        getClosedIssues: (issues) => {
+          const closedIssues = issues.filter((issue: Issue) => issue.state === IssueState.Closed)
+          set({ closed: closedIssues })
+        },
+        getInProgressIssues: (issues) => {
+          const inProgressIssues = issues.filter(
+            (issue: Issue) => issue.state === IssueState.Open && issue.assignee !== null
+          )
+          set({ inProgress: inProgressIssues })
         },
       }),
-      { name: 'repositoryIssues' }
+      { name: 'repository-issues' }
     )
   )
 )
 
-export default useStore
+export default useIssuesStore
