@@ -16,8 +16,8 @@ export function InputWithButton() {
   }
 
   return (
-    <div className="m-0 mx-auto flex w-full items-center justify-center space-x-2 pb-8">
-      <Input className="max-w-96" ref={inputRef} type="search" placeholder="Enter repository URL" />
+    <div className="m-0 px-[20px] flex w-full items-center space-x-2 pb-1">
+      <Input className="w-full" ref={inputRef} type="search" placeholder="Enter repository URL" />
       <Button onClick={handleGetIssues} type="submit">
         Load issues
       </Button>

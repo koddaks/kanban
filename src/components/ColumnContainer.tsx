@@ -11,10 +11,12 @@ type ColumnContainerProps = {
 export function ColumnContainer({ column, issues }: ColumnContainerProps) {
   return (
     <Table className="flex flex-col items-center ">
-      <TableHead className="text-center">{column}</TableHead>
-      <TableBody className="flex flex-col gap-4">
-        <ScrollArea className="h-[80vh] min-w-[360px] rounded-md border p-4">
+      <TableHead className="flex justify-center items-center bg-slate-600 w-full text-neutral-100 rounded-t-lg">{column}</TableHead>
+      <TableBody className="flex flex-col w-full">
+        <ScrollArea className="h-[80vh] rounded-b-md border p-4 bg-slate-300">
+          <div className='flex flex-col gap-2 items-center'>
           {issues?.map((issue) => <IssueCard key={issue.id} issue={issue} />)}
+          </div>         
         </ScrollArea>
       </TableBody>
       <TableFooter></TableFooter>
