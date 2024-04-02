@@ -1,13 +1,9 @@
-import { ReactNode } from "react";
+import { ReactNode } from 'react'
 
 interface KanbanBoardProps {
-    children: ReactNode;
+  children: ReactNode
 }
 
-export function KanbanBoard({children}: KanbanBoardProps) {   
-    return (
-        <div className="flex  border-collapse gap-4 p-[20px]">
-            {children}
-        </div>
-    )
+export function KanbanBoard({ children }: KanbanBoardProps) {
+  return <div className="flex  border-collapse gap-4 p-[20px]">{children}</div>
 }

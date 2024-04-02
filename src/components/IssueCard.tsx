@@ -11,8 +11,8 @@ export function IssueCard({ issue }: IssueCardProps) {
   const { login, type, avatar_url } = issue.user
 
   return (
-    <Card className="flex flex-col items-center w-[100%] max-w-[320px] transition ease-in-out duration-300 hover:-translate-y-1 hover:scale-95">
-      <CardHeader className='w-[100%]'>
+    <Card className="flex w-[100%] max-w-[320px] flex-col items-center transition duration-300 ease-in-out hover:-translate-y-1 hover:scale-95">
+      <CardHeader className="w-[100%]">
         <a href={html_url} target="_blank" rel="noopener noreferrer">
           <CardTitle>{title}</CardTitle>
           <CardDescription>

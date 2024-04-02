@@ -31,7 +31,7 @@ export function Main() {
   return (
     <main>
       <InputWithButton />
-      <BreadCrumbs owner='facebook' repo='react'/>
+      <BreadCrumbs owner="facebook" repo="react" />
       <KanbanBoard>
         <ColumnContainer column="ToDo" issues={todoIssues} />
         <ColumnContainer column="In Progress" issues={InProgressIssues} />

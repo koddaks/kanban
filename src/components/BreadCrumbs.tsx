@@ -7,13 +7,13 @@ import {
 } from '@/components/ui/breadcrumb'
 
 interface BreadCrumbsProps {
-    owner: string
-    repo: string
+  owner: string
+  repo: string
 }
 
-export function BreadCrumbs({owner, repo} : BreadCrumbsProps) {
+export function BreadCrumbs({ owner, repo }: BreadCrumbsProps) {
   return (
-    <Breadcrumb className='px-[22px]'>
+    <Breadcrumb className="px-[22px]">
       <BreadcrumbList>
         <BreadcrumbItem>
           <BreadcrumbLink href="/">{owner}</BreadcrumbLink>
@@ -22,7 +22,7 @@ export function BreadCrumbs({owner, repo} : BreadCrumbsProps) {
         <BreadcrumbItem>
           <BreadcrumbLink href="/">{repo}</BreadcrumbLink>
         </BreadcrumbItem>
-        <BreadcrumbSeparator />       
+        <BreadcrumbSeparator />
       </BreadcrumbList>
     </Breadcrumb>
   )
