@@ -100,12 +100,11 @@ const defaultTasks: Task[] = [
 ]
 
 function KanbanBoardDnD() {
-  const [columns, setColumns] = useState<Column[]>(defaultCols)
+  const [columns] = useState<Column[]>(defaultCols)
   const columnsId = useMemo(() => columns.map((col) => col.id), [columns])
 
   const [tasks, setTasks] = useState<Task[]>(defaultTasks)
-
-  const [activeColumn, setActiveColumn] = useState<Column | null>(null)
+  
 
   const [activeTask, setActiveTask] = useState<Task | null>(null)
 
@@ -140,13 +139,7 @@ function KanbanBoardDnD() {
         </div>
 
         {createPortal(
-          <DragOverlay>
-            {activeColumn && (
-              <ColumnContainer
-                column={activeColumn}
-                tasks={tasks.filter((task) => task.columnId === activeColumn.id)}
-              />
-            )}
+          <DragOverlay>           
             {activeTask && <TaskCard task={activeTask} />}
           </DragOverlay>,
           document.body
@@ -156,11 +149,6 @@ function KanbanBoardDnD() {
   )
 
   function onDragStart(event: DragStartEvent) {
-    if (event.active.data.current?.type === 'Column') {
-      setActiveColumn(event.active.data.current.column)
-      return
-    }
-
     if (event.active.data.current?.type === 'Task') {
       setActiveTask(event.active.data.current.task)
       return
@@ -168,7 +156,6 @@ function KanbanBoardDnD() {
   }
 
   function onDragEnd(event: DragEndEvent) {
-    setActiveColumn(null)
     setActiveTask(null)
 
     const { active, over } = event
@@ -178,19 +165,6 @@ function KanbanBoardDnD() {
     const overId = over.id
 
     if (activeId === overId) return
-
-    const isActiveAColumn = active.data.current?.type === 'Column'
-    if (!isActiveAColumn) return
-
-    console.log('DRAG END')
-
-    setColumns((columns) => {
-      const activeColumnIndex = columns.findIndex((col) => col.id === activeId)
-
-      const overColumnIndex = columns.findIndex((col) => col.id === overId)
-
-      return arrayMove(columns, activeColumnIndex, overColumnIndex)
-    })
   }
 
   function onDragOver(event: DragOverEvent) {
