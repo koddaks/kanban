@@ -38,8 +38,7 @@ export function ColumnContainer({ column, issues }: ColumnContainerProps) {
             </SortableContext>
           </div>
         </ScrollArea>
-      </TableBody>
-      <TableFooter></TableFooter>
+      </TableBody>      
     </Table>
   )
 }

@@ -25,7 +25,7 @@ export function KanbanBoard() {
 
   const [activeTask, setActiveTask] = useState<Issue | null>(null)
 
-  const [tasks, setTasks] = useState<Issue[]>(issues)
+  const [issueList, setIssueList] = useState<Issue[]>(issues)
   
 
   const sensors = useSensors(
@@ -38,18 +38,18 @@ export function KanbanBoard() {
 
 
   return(
-  <div className="flex border-collapse gap-4 p-[20px] ">
+  <div className="flex border-collapse p-[20px] ">
      <DndContext
         sensors={sensors}
         onDragStart={onDragStart}
         onDragEnd={onDragEnd}
         onDragOver={onDragOver}
       >
-        <div className="m-auto flex gap-4">
-          <div className="flex gap-4">
+        <div className="m-auto flex ">
+          <div className="flex gap-6">
             <SortableContext items={columnsId}>
               {KANBAN_COLUMNS.map((col) => (
-               <ColumnContainer key={col.id} column={col} issues={sortIssuesByColumn(tasks, col.id)}/>
+               <ColumnContainer key={col.id} column={col} issues={sortIssuesByColumn(issueList, col.id)}/>
               ))}
             </SortableContext>
           </div>
@@ -100,9 +100,9 @@ export function KanbanBoard() {
 
     // Im dropping a Task over another Task
     if (isActiveATask && isOverATask) {
-      setTasks((tasks) => {
-        const activeIndex = tasks.findIndex((t) => t.id === activeId)
-        const overIndex = tasks.findIndex((t) => t.id === overId)
+      setIssueList((issues) => {
+        const activeIndex = issues.findIndex((t) => t.id === activeId)
+        const overIndex = issues.findIndex((t) => t.id === overId)
 
         // if (tasks[activeIndex].columnId != tasks[overIndex].columnId) {
         //   // Fix introduced after video recording
@@ -110,7 +110,7 @@ export function KanbanBoard() {
         //   return arrayMove(tasks, activeIndex, overIndex - 1)
         // }
 
-        return arrayMove(tasks, activeIndex, overIndex)
+        return arrayMove(issues, activeIndex, overIndex)
       })
     }
 
@@ -118,12 +118,12 @@ export function KanbanBoard() {
 
     // Im dropping a Task over a column
     if (isActiveATask && isOverAColumn) {
-      setTasks((tasks) => {
-        const activeIndex = tasks.findIndex((t) => t.id === activeId)
+      setIssueList((issues) => {
+        const activeIndex = issues.findIndex((t) => t.id === activeId)
 
         // tasks[activeIndex].columnId = overId
         console.log('DROPPING TASK OVER COLUMN', { activeIndex })
-        return arrayMove(tasks, activeIndex, activeIndex)
+        return arrayMove(issues, activeIndex, activeIndex)
       })
     }
   }
