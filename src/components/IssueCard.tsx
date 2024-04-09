@@ -25,33 +25,6 @@ export function IssueCard({ issue }: IssueCardProps) {
     transform: CSS.Transform.toString(transform),
   }
 
-  if (isDragging) {
-    return (
-      <Card
-        ref={setNodeRef}
-        style={style}
-        className="relative flex min-h-[328px] w-[100%] max-w-[320px] cursor-grab flex-col items-center rounded-xl border-2 border-rose-500 p-2.5 opacity-30"
-      >
-        <CardHeader className="w-full">
-          <a href={html_url} target="_blank" rel="noopener noreferrer">
-            <CardTitle className="w-full overflow-hidden">{title}</CardTitle>
-            <CardDescription>
-              #{number} opened {getTimeStringSinceIssueOpened(created_at)}
-            </CardDescription>
-          </a>
-          <CardDescription className="flex flex-col items-center">
-            Opened by {login} | {type} <img className="size-16 rounded-full" src={avatar_url} />
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="max-w-64">
-          <p className="truncate">{body}</p>
-        </CardContent>
-        <CardFooter className="justify-center">
-          <p className="rounded-lg bg-sky-400/100 p-1">{state.toUpperCase()}</p>
-        </CardFooter>
-      </Card>
-    )
-  }
 
   return (
     <Card
@@ -59,7 +32,9 @@ export function IssueCard({ issue }: IssueCardProps) {
       style={style}
       {...attributes}
       {...listeners}
-      className="flex min-h-[328px] w-full  max-w-[320px] flex-col items-center"
+      className={`flex min-h-[328px] w-full max-w-[320px] flex-col items-center ${
+        isDragging ? 'cursor-grab border-2 border-rose-500 opacity-30' : ''
+      }`}
     >
       <CardHeader className="w-full">
         <a href={html_url} target="_blank" rel="noopener noreferrer">
