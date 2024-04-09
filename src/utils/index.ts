@@ -18,7 +18,7 @@ export function getInProgressIssues(issues: Issue[]): Issue[] {
   return issues.filter((issue: Issue) => issue.state === IssueState.Open && issue.assignee !== null)
 }
 
-export function sortIssuesByColumn(issues: Issue[], column: string): Issue[] {
+export function sortIssuesByColumn(issues: Issue[], column: string | number): Issue[] {
   switch (column) {
     case 'todo':
       return getOpenedIssuesWithAssignee(issues)
