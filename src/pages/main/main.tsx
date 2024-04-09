@@ -1,11 +1,11 @@
-// import { BreadCrumbs } from '@/components/BreadCrumbs'
-// import { ColumnContainer } from '@/components/ColumnContainer'
-// import { InputWithButton } from '@/components/InputWithButton'
-// import { KanbanBoard } from '@/components/KabanBoard'
-// import useIssuesStore from '@/store/index'
+import { BreadCrumbs } from '@/components/BreadCrumbs'
+import { ColumnContainer } from '@/components/ColumnContainer'
+import { InputWithButton } from '@/components/InputWithButton'
+import { KanbanBoard } from '@/components/KabanBoard'
+import useIssuesStore from '@/store/index'
 
 import KanbanBoardDnD from "@/components/DndTest/KanbanBoardDnD";
-import { KanbanBoard } from "@/components/KabanBoard";
+
 
 // import { useEffect } from 'react'
 
@@ -33,13 +33,9 @@ export function Main() {
 
   return (
     <main>
-      {/* <InputWithButton />
+      <InputWithButton />
       <BreadCrumbs owner="facebook" repo="react" />
-      <KanbanBoard>
-        <ColumnContainer column="ToDo" issues={todoIssues} />
-        <ColumnContainer column="In Progress" issues={InProgressIssues} />
-        <ColumnContainer column="Done" issues={doneIssues} />
-      </KanbanBoard> */}
+      <KanbanBoard/>
 
       <KanbanBoardDnD/>      
     </main>

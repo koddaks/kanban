@@ -1,6 +1,6 @@
 import { SortableContext, useSortable } from '@dnd-kit/sortable'
 import { Column, Task } from './types'
-import { CSS } from '@dnd-kit/utilities'
+
 import { useMemo } from 'react'
 import TaskCard from './TaskCard'
 
@@ -14,28 +14,13 @@ function ColumnContainer({ column, tasks }: Props) {
     return tasks.map((task) => task.id)
   }, [tasks])
 
-  const { setNodeRef, transform, transition, isDragging } = useSortable({
+  const { setNodeRef } = useSortable({
     id: column.id,
     data: {
       type: 'Column',
       column,
     },
   })
-
-  const style = {
-    transition,
-    transform: CSS.Transform.toString(transform),
-  }
-
-  if (isDragging) {
-    return (
-      <div
-        ref={setNodeRef}
-        style={style}
-        className="bg-columnBackgroundColor flex h-[500px] max-h-[500px] w-[350px] flex-col rounded-md border-2 border-pink-500 opacity-40"
-      ></div>
-    )
-  }
 
   return (
     <div

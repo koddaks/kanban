@@ -4,7 +4,7 @@ import { Issue, IssueState } from '@/types'
 export const getAllRepositoryIssues = async (repoUrl: string) => {
   try {
     const queryParams = new URLSearchParams({
-      per_page: '100',
+      per_page: '20',
       direction: 'desc',
       state: `${IssueState.All}`,
     })
