@@ -66,8 +66,7 @@ export function KanbanBoard() {
 
   function onDragStart(event: DragStartEvent) {    
     if (event.active.data.current?.type === 'Issue') {
-      setActiveTask(event.active.data.current.issue)
-      console.log(activeTask);
+      setActiveTask(event.active.data.current.issue)      
       return
     }
   }
