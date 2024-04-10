@@ -2,7 +2,7 @@ import { KANBAN_COLUMNS } from '@/const'
 import {
   DndContext,
   DragEndEvent,
-  DragOverEvent,
+  // DragOverEvent,
   DragOverlay,
   DragStartEvent,
   PointerSensor,
@@ -64,13 +64,12 @@ export function KanbanBoard() {
     </div>
   )
 
-  function onDragStart(event: DragStartEvent) {    
+  function onDragStart(event: DragStartEvent) {
     if (event.active.data.current?.type === 'Issue') {
-      setActiveTask(event.active.data.current.issue)      
+      setActiveTask(event.active.data.current.issue)
       return
     }
   }
-
 
   function onDragEnd(event: DragEndEvent) {
     const { active, over } = event
@@ -81,10 +80,26 @@ export function KanbanBoard() {
       return
     }
 
+    if (
+      event.active?.data.current?.sortable.containerId !==
+      event.over?.data.current?.sortable.containerId
+    ) {
+      setIssueList((issueList): Issue[] => {
+        const activeIndex = issueList.findIndex((t) => t.id === activeId)
+        const overIndex = issueList.findIndex((t) => t.id === overId)
+        let temp = [ ...issueList ]     
+        temp[activeIndex] = temp[overIndex]
+        
+        return arrayMove(temp, activeIndex, activeIndex)        
+      })
+    }
+
     setIssueList((issueList): Issue[] => {
       let activeIndex = issueList.findIndex((issue) => issue.id === activeId)
       let overIndex = issueList.findIndex((issue) => issue.id === overId)
 
+      console.log(activeIndex)
+    
       return arrayMove(issueList, activeIndex, overIndex)
     })
   }
