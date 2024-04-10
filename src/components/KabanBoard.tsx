@@ -38,7 +38,7 @@ export function KanbanBoard() {
     <div className="flex border-collapse p-[20px] ">
       <DndContext
         sensors={sensors}
-        // onDragStart={onDragStart}
+        onDragStart={onDragStart}
         onDragEnd={onDragEnd}
         // onDragOver={onDragOver}
       >
@@ -63,6 +63,16 @@ export function KanbanBoard() {
       </DndContext>
     </div>
   )
+
+  function onDragStart(event: DragStartEvent) {    
+    if (event.active.data.current?.type === 'Issue') {
+      setActiveTask(event.active.data.current.issue)
+      console.log(activeTask);
+      return
+    }
+  }
+
+
   function onDragEnd(event: DragEndEvent) {
     const { active, over } = event
     const activeId = active.id
@@ -73,8 +83,8 @@ export function KanbanBoard() {
     }
 
     setIssueList((issueList): Issue[] => {
-      let activeIndex = issueList.findIndex((t) => t.id === activeId)
-      let overIndex = issueList.findIndex((t) => t.id === overId)
+      let activeIndex = issueList.findIndex((issue) => issue.id === activeId)
+      let overIndex = issueList.findIndex((issue) => issue.id === overId)
 
       return arrayMove(issueList, activeIndex, overIndex)
     })
