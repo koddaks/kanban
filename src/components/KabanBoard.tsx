@@ -22,11 +22,9 @@ export function KanbanBoard() {
   const issues = useIssuesStore((state) => state.all)
   const columnsId = useMemo(() => KANBAN_COLUMNS.map((col) => col.id), [KANBAN_COLUMNS])
 
-
   const [activeTask, setActiveTask] = useState<Issue | null>(null)
 
   const [issueList, setIssueList] = useState<Issue[]>(issues)
-  
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -36,95 +34,49 @@ export function KanbanBoard() {
     })
   )
 
-
-  return(
-  <div className="flex border-collapse p-[20px] ">
-     <DndContext
+  return (
+    <div className="flex border-collapse p-[20px] ">
+      <DndContext
         sensors={sensors}
-        onDragStart={onDragStart}
+        // onDragStart={onDragStart}
         onDragEnd={onDragEnd}
-        onDragOver={onDragOver}
+        // onDragOver={onDragOver}
       >
         <div className="m-auto flex ">
           <div className="flex gap-6">
             <SortableContext items={columnsId}>
               {KANBAN_COLUMNS.map((col) => (
-               <ColumnContainer key={col.id} column={col} issues={sortIssuesByColumn(issueList, col.id)}/>
+                <ColumnContainer
+                  key={col.id}
+                  column={col}
+                  issues={sortIssuesByColumn(issueList, col.id)}
+                />
               ))}
             </SortableContext>
           </div>
         </div>
 
         {createPortal(
-          <DragOverlay>           
-            {activeTask && <IssueCard issue={activeTask} />}
-          </DragOverlay>,
+          <DragOverlay>{activeTask && <IssueCard issue={activeTask} />}</DragOverlay>,
           document.body
         )}
       </DndContext>
-  </div>
+    </div>
   )
+  function onDragEnd(event: DragEndEvent) {
+    const { active, over } = event
+    const activeId = active.id
+    const overId = over?.id
 
-  function onDragStart(event: DragStartEvent) {
-    if (event.active.data.current?.type === 'Issue') {
-      setActiveTask(event.active.data.current.task)
+    if (event.active.id === event.over?.id) {
       return
     }
-  }
 
-  function onDragEnd(event: DragEndEvent) {
-    setActiveTask(null)
+    setIssueList((issueList): Issue[] => {
+      let activeIndex = issueList.findIndex((t) => t.id === activeId)
+      let overIndex = issueList.findIndex((t) => t.id === overId)
 
-    const { active, over } = event
-    if (!over) return
-
-    const activeId = active.id
-    const overId = over.id
-
-    if (activeId === overId) return
-  }
-
-  function onDragOver(event: DragOverEvent) {
-    const { active, over } = event
-    if (!over) return
-
-    const activeId = active.id
-    const overId = over.id
-
-    if (activeId === overId) return
-
-    const isActiveATask = active.data.current?.type === 'Issue'
-    const isOverATask = over.data.current?.type === 'Issue'
-
-    if (!isActiveATask) return
-
-    // Im dropping a Task over another Task
-    if (isActiveATask && isOverATask) {
-      setIssueList((issues) => {
-        const activeIndex = issues.findIndex((t) => t.id === activeId)
-        const overIndex = issues.findIndex((t) => t.id === overId)
-
-        // if (tasks[activeIndex].columnId != tasks[overIndex].columnId) {
-        //   // Fix introduced after video recording
-        //   tasks[activeIndex].columnId = tasks[overIndex].columnId
-        //   return arrayMove(tasks, activeIndex, overIndex - 1)
-        // }
-
-        return arrayMove(issues, activeIndex, overIndex)
-      })
-    }
-
-    const isOverAColumn = over.data.current?.type === 'Column'
-
-    // Im dropping a Task over a column
-    if (isActiveATask && isOverAColumn) {
-      setIssueList((issues) => {
-        const activeIndex = issues.findIndex((t) => t.id === activeId)
-
-        // tasks[activeIndex].columnId = overId
-        console.log('DROPPING TASK OVER COLUMN', { activeIndex })
-        return arrayMove(issues, activeIndex, activeIndex)
-      })
-    }
+      return arrayMove(issueList, activeIndex, overIndex)
+    })
   }
 }
