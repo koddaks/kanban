@@ -1,6 +1,8 @@
 import { Issue } from '@/types'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from './ui/card'
-import { getTimeStringSinceIssueOpened } from '@/lib/utils'
+import { cn, getTimeStringSinceIssueOpened } from '@/lib/utils'
+import { useSortable } from '@dnd-kit/sortable'
+import { CSS } from '@dnd-kit/utilities'
 
 type IssueCardProps = {
   issue: Issue
@@ -10,11 +12,34 @@ export function IssueCard({ issue }: IssueCardProps) {
   const { html_url, title, number, created_at, state, body } = issue
   const { login, type, avatar_url } = issue.user
 
+  const { setNodeRef, attributes, listeners, transform, transition, isDragging } = useSortable({
+    id: issue.id,
+    data: {
+      type: 'Issue',
+      issue,
+    },
+  })
+
+  const style = {
+    transition,
+    transform: CSS.Transform.toString(transform),
+  }
+
   return (
-    <Card className="flex w-[100%] max-w-[320px] flex-col items-center transition duration-300 ease-in-out hover:-translate-y-1 hover:scale-95">
-      <CardHeader className="w-[100%]">
+    <Card
+      ref={setNodeRef}
+      style={style}
+      {...attributes}
+      {...listeners}
+      className={cn(
+        `flex min-h-[328px] w-full max-w-[320px] flex-col items-center ${
+          isDragging ? 'cursor-grab border-2 border-rose-500 opacity-30' : ''
+        }`
+      )}
+    >
+      <CardHeader className="w-full text-center">
         <a href={html_url} target="_blank" rel="noopener noreferrer">
-          <CardTitle>{title}</CardTitle>
+          <CardTitle className="w-full overflow-hidden">{title}</CardTitle>
           <CardDescription>
             #{number} opened {getTimeStringSinceIssueOpened(created_at)}
           </CardDescription>

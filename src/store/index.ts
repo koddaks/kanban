@@ -1,50 +1,33 @@
-import { Issue, IssueState } from '@/types'
+import { Issue } from '@/types'
 import { create } from 'zustand'
 import { devtools, persist } from 'zustand/middleware'
 import { getAllRepositoryIssues } from './api'
+import { sortIssuesByColumn } from '@/utils'
 
 interface StoreState {
   getAllIssues: (repoUrl: string) => Promise<void>
   all: Issue[]
-  openedWithAssignee: Issue[]
-  closed: Issue[]
-  inProgress: Issue[]
-  getOpenedIssuesWithAssignee: (issues: Issue[]) => void
-  getClosedIssues: (issues: Issue[]) => void
-  getInProgressIssues: (issues: Issue[]) => void
+  sortedIssues: Issue[]
+  setSortedIssues: () => void
 }
 
 const useIssuesStore = create<StoreState>()(
   devtools(
     persist(
-      (set) => ({
+      (set, get) => ({
         all: [],
-        openedWithAssignee: [],
-        closed: [],
-        inProgress: [],
+        sortedIssues: [],
         async getAllIssues(repoUrl: string) {
           const data = await getAllRepositoryIssues(repoUrl)
           set({ all: data })
         },
-        getOpenedIssuesWithAssignee: (issues) => {
-          const currentDate = Date.now()
-          const threeDaysAgo = currentDate - 3 * 24 * 60 * 60 * 1000
-
-          const openedIssues = issues.filter((issue: Issue) => {
-            const issueDate = new Date(issue.created_at).getTime()
-            return issueDate >= threeDaysAgo && issue.state !== IssueState.Closed
-          })
-          set({ openedWithAssignee: openedIssues })
-        },
-        getClosedIssues: (issues) => {
-          const closedIssues = issues.filter((issue: Issue) => issue.state === IssueState.Closed)
-          set({ closed: closedIssues })
-        },
-        getInProgressIssues: (issues) => {
-          const inProgressIssues = issues.filter(
-            (issue: Issue) => issue.state === IssueState.Open && issue.assignee !== null
-          )
-          set({ inProgress: inProgressIssues })
+        setSortedIssues: () => {
+          const { all } = get()
+          const todoIssues: Issue[] = sortIssuesByColumn(all, 'todo')
+          const doingIssues: Issue[] = sortIssuesByColumn(all, 'doing')
+          const doneIssues: Issue[] = sortIssuesByColumn(all, 'done')
+          const sortedIssues = [...todoIssues, ...doingIssues, ...doneIssues]
+          set({ sortedIssues })
         },
       }),
       { name: 'repository-issues' }
