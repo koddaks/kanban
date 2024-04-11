@@ -22,20 +22,15 @@ export function KanbanBoard() {
   const allIssues = useIssuesStore((state) => state.all)
   const [columns] = useState(KANBAN_COLUMNS)
   const columnsId = useMemo(() => columns.map((col) => col.id), [KANBAN_COLUMNS])
-
   const [activeTask, setActiveTask] = useState<Issue | null>(null)
 
   const [issueList, setIssueList] = useState<Issue[]>(() => {
-    const todoIssues: Issue[] = sortIssuesByColumn(allIssues, 'todo');
-    const doingIssues: Issue[] = sortIssuesByColumn(allIssues, 'doing');
-    const doneIssues: Issue[] = sortIssuesByColumn(allIssues, 'done');
-  
-    return [
-      ...todoIssues,
-      ...doingIssues,
-      ...doneIssues,
-    ];
-  });
+    const todoIssues: Issue[] = sortIssuesByColumn(allIssues, 'todo')
+    const doingIssues: Issue[] = sortIssuesByColumn(allIssues, 'doing')
+    const doneIssues: Issue[] = sortIssuesByColumn(allIssues, 'done')
+
+    return [...todoIssues, ...doingIssues, ...doneIssues]
+  })
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -114,16 +109,15 @@ export function KanbanBoard() {
 
         if (issueList[activeIndex].columnId != issueList[overIndex].columnId) {
           // Fix introduced after video recording
-          issueList[activeIndex].columnId = issueList[overIndex].columnId        
-          return arrayMove(issueList, activeIndex, overIndex - 1)
+          issueList[activeIndex].columnId = issueList[overIndex].columnId
+          return arrayMove(issueList, activeIndex, overIndex)
         }
 
         return arrayMove(issueList, activeIndex, overIndex)
       })
     }
 
-    
-    const isOverAColumn = over.data.current?.type === 'Column'   
+    const isOverAColumn = over.data.current?.type === 'Column'
 
     // Im dropping a Task over a column
     if (isActiveATask && isOverAColumn) {

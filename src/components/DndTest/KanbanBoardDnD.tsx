@@ -104,7 +104,6 @@ function KanbanBoardDnD() {
   const columnsId = useMemo(() => columns.map((col) => col.id), [columns])
 
   const [tasks, setTasks] = useState<Task[]>(defaultTasks)
-  
 
   const [activeTask, setActiveTask] = useState<Task | null>(null)
 
@@ -139,9 +138,7 @@ function KanbanBoardDnD() {
         </div>
 
         {createPortal(
-          <DragOverlay>           
-            {activeTask && <TaskCard task={activeTask} />}
-          </DragOverlay>,
+          <DragOverlay>{activeTask && <TaskCard task={activeTask} />}</DragOverlay>,
           document.body
         )}
       </DndContext>

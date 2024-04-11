@@ -6,7 +6,6 @@ import { getAllRepositoryIssues } from './api'
 interface StoreState {
   getAllIssues: (repoUrl: string) => Promise<void>
   all: Issue[]
-
 }
 
 const useIssuesStore = create<StoreState>()(
@@ -17,7 +16,7 @@ const useIssuesStore = create<StoreState>()(
         async getAllIssues(repoUrl: string) {
           const data = await getAllRepositoryIssues(repoUrl)
           set({ all: data })
-        },       
+        },
       }),
       { name: 'repository-issues' }
     )
