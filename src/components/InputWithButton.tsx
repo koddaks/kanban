@@ -11,10 +11,10 @@ export function InputWithButton() {
   const handleGetIssues = (): void => {
     const inputValue = inputRef?.current?.value
     if (inputValue !== undefined && inputValue !== '') {
-      getIssues(inputValue)    
+      getIssues(inputValue)
       if (inputRef.current) {
-        inputRef.current.value = '';
-      } 
+        inputRef.current.value = ''
+      }
     }
   }
 

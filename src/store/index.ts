@@ -28,7 +28,7 @@ const useIssuesStore = create<StoreState>()(
           const doneIssues: Issue[] = sortIssuesByColumn(all, 'done')
           const sortedIssues = [...todoIssues, ...doingIssues, ...doneIssues]
           set({ sortedIssues })
-        }
+        },
       }),
       { name: 'repository-issues' }
     )
