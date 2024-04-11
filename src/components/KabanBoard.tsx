@@ -2,7 +2,7 @@ import { KANBAN_COLUMNS } from '@/const'
 import {
   DndContext,
   DragEndEvent,
-  // DragOverEvent,
+  DragOverEvent,
   DragOverlay,
   DragStartEvent,
   PointerSensor,
@@ -19,12 +19,23 @@ import { IssueCard } from './IssueCard'
 import { Issue } from '@/types'
 
 export function KanbanBoard() {
-  const issues = useIssuesStore((state) => state.all)
-  const columnsId = useMemo(() => KANBAN_COLUMNS.map((col) => col.id), [KANBAN_COLUMNS])
+  const allIssues = useIssuesStore((state) => state.all)
+  const [columns] = useState(KANBAN_COLUMNS)
+  const columnsId = useMemo(() => columns.map((col) => col.id), [KANBAN_COLUMNS])
 
   const [activeTask, setActiveTask] = useState<Issue | null>(null)
 
-  const [issueList, setIssueList] = useState<Issue[]>(issues)
+  const [issueList, setIssueList] = useState<Issue[]>(() => {
+    const todoIssues: Issue[] = sortIssuesByColumn(allIssues, 'todo');
+    const doingIssues: Issue[] = sortIssuesByColumn(allIssues, 'doing');
+    const doneIssues: Issue[] = sortIssuesByColumn(allIssues, 'done');
+  
+    return [
+      ...todoIssues,
+      ...doingIssues,
+      ...doneIssues,
+    ];
+  });
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -40,16 +51,16 @@ export function KanbanBoard() {
         sensors={sensors}
         onDragStart={onDragStart}
         onDragEnd={onDragEnd}
-        // onDragOver={onDragOver}
+        onDragOver={onDragOver}
       >
         <div className="m-auto flex ">
           <div className="flex gap-6">
             <SortableContext items={columnsId}>
-              {KANBAN_COLUMNS.map((col) => (
+              {columns.map((col) => (
                 <ColumnContainer
                   key={col.id}
                   column={col}
-                  issues={sortIssuesByColumn(issueList, col.id)}
+                  issues={issueList.filter((issue) => issue.columnId === col.id)}
                 />
               ))}
             </SortableContext>
@@ -72,35 +83,57 @@ export function KanbanBoard() {
   }
 
   function onDragEnd(event: DragEndEvent) {
+    setActiveTask(null)
+
     const { active, over } = event
+    if (!over) return
+
     const activeId = active.id
-    const overId = over?.id
+    const overId = over.id
 
-    if (event.active.id === event.over?.id) {
-      return
-    }
+    if (activeId === overId) return
+  }
 
-    if (
-      event.active?.data.current?.sortable.containerId !==
-      event.over?.data.current?.sortable.containerId
-    ) {
+  function onDragOver(event: DragOverEvent) {
+    const { active, over } = event
+    if (!over) return
+
+    const activeId = active.id
+    const overId = over.id
+
+    if (activeId === overId) return
+
+    const isActiveATask = active.data.current?.type === 'Issue'
+    const isOverATask = over.data.current?.type === 'Issue'
+
+    if (!isActiveATask) return
+    if (isActiveATask && isOverATask) {
       setIssueList((issueList): Issue[] => {
         const activeIndex = issueList.findIndex((t) => t.id === activeId)
         const overIndex = issueList.findIndex((t) => t.id === overId)
-        let temp = [ ...issueList ]     
-        temp[activeIndex] = temp[overIndex]
-        
-        return arrayMove(temp, activeIndex, activeIndex)        
+
+        if (issueList[activeIndex].columnId != issueList[overIndex].columnId) {
+          // Fix introduced after video recording
+          issueList[activeIndex].columnId = issueList[overIndex].columnId        
+          return arrayMove(issueList, activeIndex, overIndex - 1)
+        }
+
+        return arrayMove(issueList, activeIndex, overIndex)
       })
     }
 
-    setIssueList((issueList): Issue[] => {
-      let activeIndex = issueList.findIndex((issue) => issue.id === activeId)
-      let overIndex = issueList.findIndex((issue) => issue.id === overId)
-
-      console.log(activeIndex)
     
-      return arrayMove(issueList, activeIndex, overIndex)
-    })
+    const isOverAColumn = over.data.current?.type === 'Column'   
+
+    // Im dropping a Task over a column
+    if (isActiveATask && isOverAColumn) {
+      setIssueList((issueList) => {
+        const activeIndex = issueList.findIndex((t) => t.id === activeId)
+
+        issueList[activeIndex].columnId = overId
+        console.log('DROPPING ISSUE OVER COLUMN', { activeIndex })
+        return arrayMove(issueList, activeIndex, activeIndex)
+      })
+    }
   }
 }

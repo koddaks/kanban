@@ -19,14 +19,33 @@ export function getInProgressIssues(issues: Issue[]): Issue[] {
 }
 
 export function sortIssuesByColumn(issues: Issue[], column: string | number): Issue[] {
+  let sortedIssues: Issue[] = [];
+
   switch (column) {
     case 'todo':
-      return getOpenedIssuesWithAssignee(issues)
+      sortedIssues = getOpenedIssuesWithAssignee(issues).map(issue => ({
+        ...issue,
+        columnId: 'todo'
+      }));
+      break;
     case 'done':
-      return getClosedIssues(issues)
+      sortedIssues = getClosedIssues(issues).map(issue => ({
+        ...issue,
+        columnId: 'done'
+      }));
+      break;
     case 'doing':
-      return getInProgressIssues(issues)
+      sortedIssues = getInProgressIssues(issues).map(issue => ({
+        ...issue,
+        columnId: 'doing'
+      }));
+      break;
     default:
-      return issues
+      sortedIssues = issues.map(issue => ({
+        ...issue,
+        columnId: 'all'
+      }));
   }
+
+  return sortedIssues;
 }

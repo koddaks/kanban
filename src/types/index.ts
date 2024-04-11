@@ -57,6 +57,7 @@ export interface Issue {
   timeline_url: string
   performed_via_github_app: any | null
   state_reason: string | null
+  columnId?: string | number
 }
 
 export enum IssueState {
