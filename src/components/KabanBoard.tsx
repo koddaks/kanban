@@ -110,7 +110,7 @@ export function KanbanBoard() {
         if (issueList[activeIndex].columnId != issueList[overIndex].columnId) {
           // Fix introduced after video recording
           issueList[activeIndex].columnId = issueList[overIndex].columnId
-          return arrayMove(issueList, activeIndex, overIndex)
+          return arrayMove(issueList, activeIndex, overIndex - 1)
         }
 
         return arrayMove(issueList, activeIndex, overIndex)
