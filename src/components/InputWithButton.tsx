@@ -6,12 +6,15 @@ import { useRef } from 'react'
 
 export function InputWithButton() {
   const inputRef = useRef<HTMLInputElement | null>(null)
-
   const getIssues = useIssuesStore((state) => state.getAllIssues)
+
   const handleGetIssues = (): void => {
     const inputValue = inputRef?.current?.value
     if (inputValue !== undefined && inputValue !== '') {
-      getIssues(inputValue)
+      getIssues(inputValue)    
+      if (inputRef.current) {
+        inputRef.current.value = '';
+      } 
     }
   }
 
