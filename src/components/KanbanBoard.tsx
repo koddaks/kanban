@@ -27,7 +27,7 @@ export function KanbanBoard() {
 
   const [issueList, setIssueList] = useState<Issue[]>(sortedIssues)
 
-  useEffect(() => {    
+  useEffect(() => {
     setIssueList(getSortedIssues())
   }, [allIssues, getSortedIssues])
 
