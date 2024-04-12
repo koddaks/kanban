@@ -8,7 +8,7 @@ interface StoreState {
   getAllIssues: (repoUrl: string) => Promise<void>
   all: Issue[]
   sortedIssues: Issue[]
-  setSortedIssues: () => void
+  getSortedIssues: () => Issue[]
 }
 
 const useIssuesStore = create<StoreState>()(
@@ -21,13 +21,14 @@ const useIssuesStore = create<StoreState>()(
           const data = await getAllRepositoryIssues(repoUrl)
           set({ all: data })
         },
-        setSortedIssues: () => {
+        getSortedIssues: () => {
           const { all } = get()
           const todoIssues: Issue[] = sortIssuesByColumn(all, 'todo')
           const doingIssues: Issue[] = sortIssuesByColumn(all, 'doing')
           const doneIssues: Issue[] = sortIssuesByColumn(all, 'done')
           const sortedIssues = [...todoIssues, ...doingIssues, ...doneIssues]
           set({ sortedIssues })
+          return sortedIssues
         },
       }),
       { name: 'repository-issues' }
