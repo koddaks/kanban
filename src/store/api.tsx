@@ -1,5 +1,5 @@
-import { modifyGithubUrl } from '@/lib/utils'
 import { Issue, IssueState } from '@/types'
+import { modifyGithubUrl } from '@/utils'
 
 export const getAllRepositoryIssues = async (repoUrl: string) => {
   try {
