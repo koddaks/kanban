@@ -18,18 +18,20 @@ import { IssueCard } from './IssueCard'
 import { Issue } from '@/types'
 
 export function KanbanBoard() {
-  const allIssues = useIssuesStore((state) => state.all)
-  const getSortedIssues = useIssuesStore((state) => state.getSortedIssues)
-  const sortedIssues = useIssuesStore((state) => state.sortedIssues)
+  const currentRepoUrl = useIssuesStore((state) => state.currentRepoUrl)
+  const issuesByStore = useIssuesStore((state) => state.issuesByStore)
+
   const [columns] = useState(KANBAN_COLUMNS)
   const columnsId = useMemo(() => columns.map((col) => col.id), [KANBAN_COLUMNS])
   const [activeTask, setActiveTask] = useState<Issue | null>(null)
 
-  const [issueList, setIssueList] = useState<Issue[]>(sortedIssues)
+  const [issueList, setIssueList] = useState<Issue[]>([])
 
+ 
   useEffect(() => {
-    setIssueList(getSortedIssues())
-  }, [allIssues, getSortedIssues])
+    setIssueList(issuesByStore[currentRepoUrl]) 
+
+  }, [currentRepoUrl, issuesByStore])
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
