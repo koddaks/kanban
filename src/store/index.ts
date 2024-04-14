@@ -23,18 +23,18 @@ const useIssuesStore = create<IssuesState>()(
           const { issuesByStore } = get()
 
           if (issuesByStore[repoUrl] && issuesByStore[repoUrl].length != 0) {
-            console.log('repository already exist in LocalStorage');
+            console.log('repository already exist in LocalStorage')
             set({
               currentRepoUrl: repoUrl,
               issuesByStore: {
-                ...issuesByStore,                
+                ...issuesByStore,
               },
-            }) 
+            })
             return
           }
 
           const data = await getAllRepositoryIssues(repoUrl)
-          
+
           if (!data) return
 
           const todoIssues: Issue[] = sortIssuesByColumn(data, 'todo')
@@ -49,8 +49,8 @@ const useIssuesStore = create<IssuesState>()(
               ...issuesByStore,
               [repoUrl]: sortedIssues,
             },
-          })          
-        },  
+          })
+        },
       }),
       { name: 'repository-issues' }
     )

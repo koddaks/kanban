@@ -27,10 +27,8 @@ export function KanbanBoard() {
 
   const [issueList, setIssueList] = useState<Issue[]>([])
 
- 
   useEffect(() => {
-    setIssueList(issuesByStore[currentRepoUrl]) 
-
+    setIssueList(issuesByStore[currentRepoUrl])
   }, [currentRepoUrl, issuesByStore])
 
   const sensors = useSensors(
