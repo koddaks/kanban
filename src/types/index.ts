@@ -33,7 +33,7 @@ export interface Issue {
   state: string
   locked: boolean
   assignee: Assignee
-  assignees: Assignee[]  
+  assignees: Assignee[]
   comments: number
   created_at: string
   updated_at: string
@@ -93,19 +93,19 @@ interface Assignee {
 }
 
 interface Repository {
-  id: number;
-  node_id: string;
-  name: string;
-  full_name: string;
+  id: number
+  node_id: string
+  name: string
+  full_name: string
   owner: {
-    login: string;
-    id: number;
-    node_id: string;
-    avatar_url: string;
-    gravatar_id: string;
-    url: string;
-    html_url: string;
-  };
+    login: string
+    id: number
+    node_id: string
+    avatar_url: string
+    gravatar_id: string
+    url: string
+    html_url: string
+  }
 }
 
 export enum IssueState {
