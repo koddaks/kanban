@@ -7,20 +7,41 @@ import {
 } from '@/components/ui/breadcrumb'
 
 interface BreadCrumbsProps {
-  owner: string
-  repo: string
+  owner:
+    | {
+        name: string
+        link: string
+      }
+    | undefined
+  repo:
+    | {
+        name: string
+        link: string
+      }
+    | undefined
 }
 
 export function BreadCrumbs({ owner, repo }: BreadCrumbsProps) {
+  
+  if (!owner && !repo) {
+    return (
+      <Breadcrumb className="px-[22px] pb-5"/>     
+    )
+  }
+
   return (
     <Breadcrumb className="px-[22px]">
       <BreadcrumbList>
         <BreadcrumbItem>
-          <BreadcrumbLink href="/">{owner}</BreadcrumbLink>
+          <BreadcrumbLink href={owner?.link} target="_blank">
+            {owner?.name}
+          </BreadcrumbLink>
         </BreadcrumbItem>
         <BreadcrumbSeparator />
         <BreadcrumbItem>
-          <BreadcrumbLink href="/">{repo}</BreadcrumbLink>
+          <BreadcrumbLink href={repo?.link} target="_blank">
+            {repo?.name}
+          </BreadcrumbLink>
         </BreadcrumbItem>
         <BreadcrumbSeparator />
       </BreadcrumbList>
