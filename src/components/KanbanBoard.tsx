@@ -12,25 +12,24 @@ import {
 import { SortableContext, arrayMove } from '@dnd-kit/sortable'
 import { createPortal } from 'react-dom'
 import { ColumnContainer } from './ColumnContainer'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import useIssuesStore from '@/store'
-import { sortIssuesByColumn } from '@/utils'
 import { IssueCard } from './IssueCard'
 import { Issue } from '@/types'
 
 export function KanbanBoard() {
-  const allIssues = useIssuesStore((state) => state.all)
+  const currentRepoUrl = useIssuesStore((state) => state.currentRepoUrl)
+  const issuesByStore = useIssuesStore((state) => state.issuesByStore)
+
   const [columns] = useState(KANBAN_COLUMNS)
-  const columnsId = useMemo(() => columns.map((col) => col.id), [KANBAN_COLUMNS])
+  const columnsId = useMemo(() => columns.map((col) => col.id), [columns])
   const [activeTask, setActiveTask] = useState<Issue | null>(null)
 
-  const [issueList, setIssueList] = useState<Issue[]>(() => {
-    const todoIssues: Issue[] = sortIssuesByColumn(allIssues, 'todo')
-    const doingIssues: Issue[] = sortIssuesByColumn(allIssues, 'doing')
-    const doneIssues: Issue[] = sortIssuesByColumn(allIssues, 'done')
+  const [issueList, setIssueList] = useState<Issue[]>([])
 
-    return [...todoIssues, ...doingIssues, ...doneIssues]
-  })
+  useEffect(() => {
+    setIssueList(issuesByStore[currentRepoUrl] || [])
+  }, [currentRepoUrl, issuesByStore])
 
   const sensors = useSensors(
     useSensor(PointerSensor, {

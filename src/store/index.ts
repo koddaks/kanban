@@ -4,30 +4,52 @@ import { devtools, persist } from 'zustand/middleware'
 import { getAllRepositoryIssues } from './api'
 import { sortIssuesByColumn } from '@/utils'
 
-interface StoreState {
-  getAllIssues: (repoUrl: string) => Promise<void>
-  all: Issue[]
-  sortedIssues: Issue[]
-  setSortedIssues: () => void
+interface IssuesState {
+  getIssues: (repoUrl: string) => Promise<void>
+  currentRepoUrl: string
+  issuesByStore: {
+    [repoUrl: string]: Issue[]
+  }
 }
 
-const useIssuesStore = create<StoreState>()(
+const useIssuesStore = create<IssuesState>()(
   devtools(
     persist(
       (set, get) => ({
-        all: [],
-        sortedIssues: [],
-        async getAllIssues(repoUrl: string) {
+        issuesByStore: {},
+        currentRepoUrl: '',
+
+        async getIssues(repoUrl: string) {
+          const { issuesByStore } = get()
+
+          if (issuesByStore[repoUrl] && issuesByStore[repoUrl].length != 0) {
+            console.log('repository already exist in LocalStorage')
+            set({
+              currentRepoUrl: repoUrl,
+              issuesByStore: {
+                ...issuesByStore,
+              },
+            })
+            return
+          }
+
           const data = await getAllRepositoryIssues(repoUrl)
-          set({ all: data })
-        },
-        setSortedIssues: () => {
-          const { all } = get()
-          const todoIssues: Issue[] = sortIssuesByColumn(all, 'todo')
-          const doingIssues: Issue[] = sortIssuesByColumn(all, 'doing')
-          const doneIssues: Issue[] = sortIssuesByColumn(all, 'done')
+
+          if (!data) return
+
+          const todoIssues: Issue[] = sortIssuesByColumn(data, 'todo')
+          const doingIssues: Issue[] = sortIssuesByColumn(data, 'doing')
+          const doneIssues: Issue[] = sortIssuesByColumn(data, 'done')
+
           const sortedIssues = [...todoIssues, ...doingIssues, ...doneIssues]
-          set({ sortedIssues })
+
+          set({
+            currentRepoUrl: repoUrl,
+            issuesByStore: {
+              ...issuesByStore,
+              [repoUrl]: sortedIssues,
+            },
+          })
         },
       }),
       { name: 'repository-issues' }

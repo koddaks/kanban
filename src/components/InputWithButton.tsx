@@ -6,7 +6,7 @@ import { useRef } from 'react'
 
 export function InputWithButton() {
   const inputRef = useRef<HTMLInputElement | null>(null)
-  const getIssues = useIssuesStore((state) => state.getAllIssues)
+  const getIssues = useIssuesStore((state) => state.getIssues)
 
   const handleGetIssues = (): void => {
     const inputValue = inputRef?.current?.value

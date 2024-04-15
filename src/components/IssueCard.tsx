@@ -1,8 +1,9 @@
 import { Issue } from '@/types'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from './ui/card'
-import { cn, getTimeStringSinceIssueOpened } from '@/lib/utils'
+import { cn } from '@/lib/utils'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
+import { getTimeStringSinceIssueOpened } from '@/utils'
 
 type IssueCardProps = {
   issue: Issue
