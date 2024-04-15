@@ -22,13 +22,13 @@ export function KanbanBoard() {
   const issuesByStore = useIssuesStore((state) => state.issuesByStore)
 
   const [columns] = useState(KANBAN_COLUMNS)
-  const columnsId = useMemo(() => columns.map((col) => col.id), [KANBAN_COLUMNS])
+  const columnsId = useMemo(() => columns.map((col) => col.id), [columns])
   const [activeTask, setActiveTask] = useState<Issue | null>(null)
 
   const [issueList, setIssueList] = useState<Issue[]>([])
 
   useEffect(() => {
-    setIssueList(issuesByStore[currentRepoUrl])
+    setIssueList(issuesByStore[currentRepoUrl] || [])
   }, [currentRepoUrl, issuesByStore])
 
   const sensors = useSensors(
