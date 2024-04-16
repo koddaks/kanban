@@ -6,7 +6,7 @@ export function Main() {
   return (
     <main>
       <InputWithButton />
-      <BreadCrumbs owner="facebook" repo="react" />
+      <BreadCrumbs />
       <KanbanBoard />
     </main>
   )

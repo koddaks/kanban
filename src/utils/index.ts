@@ -70,7 +70,9 @@ export function extractOwnerAndRepo(url: string) {
   if (matches && matches.length === 3) {
     const owner = matches[1]
     const repo = matches[2]
-    return { owner, repo }
+    const ownerLink = `https://github.com/${owner}`
+    const repoLink = `https://github.com/${owner}/${repo}`
+    return { owner: { name: owner, link: ownerLink }, repo: { name: repo, link: repoLink } }
   } else {
     return null
   }

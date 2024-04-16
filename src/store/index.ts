@@ -1,12 +1,17 @@
-import { Issue } from '@/types'
+import { Issue, Owner, Repo } from '@/types'
 import { create } from 'zustand'
 import { devtools, persist } from 'zustand/middleware'
 import { getAllRepositoryIssues } from './api'
-import { sortIssuesByColumn } from '@/utils'
+import { extractOwnerAndRepo, sortIssuesByColumn } from '@/utils'
 
 interface IssuesState {
   getIssues: (repoUrl: string) => Promise<void>
   currentRepoUrl: string
+  currentOwnerAndRepo: {
+    owner: Owner | undefined
+    repo: Repo | undefined
+  }
+  setCurrentOwnerAndRepo: () => void
   issuesByStore: {
     [repoUrl: string]: Issue[]
   }
@@ -18,12 +23,11 @@ const useIssuesStore = create<IssuesState>()(
       (set, get) => ({
         issuesByStore: {},
         currentRepoUrl: '',
-
+        currentOwnerAndRepo: { owner: undefined, repo: undefined },
         async getIssues(repoUrl: string) {
           const { issuesByStore } = get()
 
           if (issuesByStore[repoUrl] && issuesByStore[repoUrl].length != 0) {
-            console.log('repository already exist in LocalStorage')
             set({
               currentRepoUrl: repoUrl,
               issuesByStore: {
@@ -48,6 +52,18 @@ const useIssuesStore = create<IssuesState>()(
             issuesByStore: {
               ...issuesByStore,
               [repoUrl]: sortedIssues,
+            },
+          })
+        },
+
+        setCurrentOwnerAndRepo() {
+          const { currentRepoUrl } = get()
+          const data = extractOwnerAndRepo(currentRepoUrl)
+
+          set({
+            currentOwnerAndRepo: {
+              owner: data?.owner,
+              repo: data?.repo,
             },
           })
         },

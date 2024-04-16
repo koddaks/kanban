@@ -5,22 +5,36 @@ import {
   BreadcrumbList,
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb'
+import useIssuesStore from '@/store'
+import { useEffect } from 'react'
 
-interface BreadCrumbsProps {
-  owner: string
-  repo: string
-}
+export function BreadCrumbs() {
+  const currentRepoUrl = useIssuesStore((state) => state.currentRepoUrl)
+  const currentOwnerAndRepo = useIssuesStore((state) => state.currentOwnerAndRepo)
+  const setCurrentOwnerAndRepo = useIssuesStore((state) => state.setCurrentOwnerAndRepo)
+  const { owner, repo } = currentOwnerAndRepo
 
-export function BreadCrumbs({ owner, repo }: BreadCrumbsProps) {
+  useEffect(() => {
+    setCurrentOwnerAndRepo()
+  }, [currentRepoUrl])
+
+  if (!owner && !repo) {
+    return <Breadcrumb className="px-[22px] pb-5" />
+  }
+
   return (
     <Breadcrumb className="px-[22px]">
       <BreadcrumbList>
         <BreadcrumbItem>
-          <BreadcrumbLink href="/">{owner}</BreadcrumbLink>
+          <BreadcrumbLink href={owner?.link} target="_blank">
+            {owner?.name}
+          </BreadcrumbLink>
         </BreadcrumbItem>
         <BreadcrumbSeparator />
         <BreadcrumbItem>
-          <BreadcrumbLink href="/">{repo}</BreadcrumbLink>
+          <BreadcrumbLink href={repo?.link} target="_blank">
+            {repo?.name}
+          </BreadcrumbLink>
         </BreadcrumbItem>
         <BreadcrumbSeparator />
       </BreadcrumbList>
