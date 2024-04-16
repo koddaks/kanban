@@ -107,7 +107,6 @@ export function KanbanBoard() {
         const overIndex = issueList.findIndex((t) => t.id === overId)
 
         if (issueList[activeIndex].columnId != issueList[overIndex].columnId) {
-          // Fix introduced after video recording
           issueList[activeIndex].columnId = issueList[overIndex].columnId
           return arrayMove(issueList, activeIndex, overIndex - 1)
         }
@@ -118,7 +117,6 @@ export function KanbanBoard() {
 
     const isOverAColumn = over.data.current?.type === 'Column'
 
-    // Im dropping a Task over a column
     if (isActiveATask && isOverAColumn) {
       setIssueList((issueList) => {
         const activeIndex = issueList.findIndex((t) => t.id === activeId)

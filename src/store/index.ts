@@ -28,7 +28,6 @@ const useIssuesStore = create<IssuesState>()(
           const { issuesByStore } = get()
 
           if (issuesByStore[repoUrl] && issuesByStore[repoUrl].length != 0) {
-            console.log('repository already exist in LocalStorage')
             set({
               currentRepoUrl: repoUrl,
               issuesByStore: {
