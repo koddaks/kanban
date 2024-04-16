@@ -24,13 +24,13 @@ export function ColumnContainer({ column, issues }: ColumnContainerProps) {
   })
 
   return (
-    <Table ref={setNodeRef} className="flex w-[380px] flex-col items-center">
-      <TableHead className="flex w-full items-center justify-center rounded-t-lg bg-slate-600 text-neutral-100">
+    <Table ref={setNodeRef}>
+      <TableHead className="flex justify-center items-center rounded-t-lg bg-slate-600 text-neutral-100">
         {column.title}
       </TableHead>
       <TableBody className="flex w-full flex-col">
         <ScrollArea className="h-[80vh] w-full rounded-b-md border bg-slate-300 p-4">
-          <div className="flex flex-col items-center gap-2">
+          <div className="flex flex-col gap-4 items-center">
             <SortableContext items={tasksIds}>
               {issues?.map((issue) => <IssueCard key={issue.id} issue={issue} />)}
             </SortableContext>

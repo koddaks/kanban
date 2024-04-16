@@ -40,15 +40,13 @@ export function KanbanBoard() {
   )
 
   return (
-    <div className="flex border-collapse p-[20px] ">
+    <div className="flex gap-2">
       <DndContext
         sensors={sensors}
         onDragStart={onDragStart}
         onDragEnd={onDragEnd}
         onDragOver={onDragOver}
-      >
-        <div className="m-auto flex ">
-          <div className="flex gap-6">
+      >                  
             <SortableContext items={columnsId}>
               {columns.map((col) => (
                 <ColumnContainer
@@ -58,9 +56,6 @@ export function KanbanBoard() {
                 />
               ))}
             </SortableContext>
-          </div>
-        </div>
-
         {createPortal(
           <DragOverlay>{activeTask && <IssueCard issue={activeTask} />}</DragOverlay>,
           document.body

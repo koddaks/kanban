@@ -16,14 +16,10 @@ export function BreadCrumbs() {
 
   useEffect(() => {
     setCurrentOwnerAndRepo()
-  }, [currentRepoUrl])
-
-  if (!owner && !repo) {
-    return <Breadcrumb className="px-[22px] pb-5" />
-  }
+  }, [currentRepoUrl]) 
 
   return (
-    <Breadcrumb className="px-[22px]">
+    <Breadcrumb className="px-1">
       <BreadcrumbList>
         <BreadcrumbItem>
           <BreadcrumbLink href={owner?.link} target="_blank">
