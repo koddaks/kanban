@@ -5,26 +5,21 @@ import {
   BreadcrumbList,
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb'
-import useIssuesStore from '@/store';
+import useIssuesStore from '@/store'
 import { useEffect } from 'react'
-
-
 
 export function BreadCrumbs() {
   const currentRepoUrl = useIssuesStore((state) => state.currentRepoUrl)
   const currentOwnerAndRepo = useIssuesStore((state) => state.currentOwnerAndRepo)
   const setCurrentOwnerAndRepo = useIssuesStore((state) => state.setCurrentOwnerAndRepo)
-  const {owner, repo} = currentOwnerAndRepo  
-  
+  const { owner, repo } = currentOwnerAndRepo
 
-  useEffect(() => {   
+  useEffect(() => {
     setCurrentOwnerAndRepo()
   }, [currentRepoUrl])
-  
+
   if (!owner && !repo) {
-    return (
-      <Breadcrumb className="px-[22px] pb-5"/>     
-    )
+    return <Breadcrumb className="px-[22px] pb-5" />
   }
 
   return (
