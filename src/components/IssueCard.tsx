@@ -1,11 +1,11 @@
 import { Issue } from '@/types'
-import { Card, CardDescription, CardFooter, CardContent, CardHeader, CardTitle } from './ui/card'
+import { Card, CardContent, CardHeader, CardTitle } from './ui/card'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { cn } from '@/lib/utils'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { getTimeStringSinceIssueOpened } from '@/utils'
-import { Link } from 'lucide-react'
+
 
 type IssueCardProps = {
   issue: Issue
