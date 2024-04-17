@@ -15,7 +15,8 @@ import { ColumnContainer } from './ColumnContainer'
 import { useEffect, useMemo, useState } from 'react'
 import useIssuesStore from '@/store'
 import { IssueCard } from './IssueCard'
-import { Issue } from '@/types'
+import { Issue, RepoInfo } from '@/types'
+import { extractOwnerAndRepo } from '@/utils'
 
 export function KanbanBoard() {
   const currentRepoUrl = useIssuesStore((state) => state.currentRepoUrl)
@@ -27,9 +28,21 @@ export function KanbanBoard() {
 
   const [issueList, setIssueList] = useState<Issue[]>([])
 
-  useEffect(() => {
+  const addRepo = useIssuesStore((state) => state.addRepo)
+  const ownerAndRepoInfo: RepoInfo | null = extractOwnerAndRepo(currentRepoUrl)
+
+  useEffect(() => {    
+    if(ownerAndRepoInfo) {
+      addRepo(ownerAndRepoInfo)
+    }
+  }, [currentRepoUrl])
+
+
+  useEffect(() => {    
     setIssueList(issuesByStore[currentRepoUrl] || [])
   }, [currentRepoUrl, issuesByStore])
+
+
 
   const sensors = useSensors(
     useSensor(PointerSensor, {

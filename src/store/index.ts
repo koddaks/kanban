@@ -1,20 +1,18 @@
-import { Issue, Owner, Repo } from '@/types'
+import { Issue, RepoInfo } from '@/types'
 import { create } from 'zustand'
 import { devtools, persist } from 'zustand/middleware'
 import { getAllRepositoryIssues } from './api'
-import { extractOwnerAndRepo, sortIssuesByColumn } from '@/utils'
+import { sortIssuesByColumn } from '@/utils'
 
 interface IssuesState {
   getIssues: (repoUrl: string) => Promise<void>
-  currentRepoUrl: string
-  currentOwnerAndRepo: {
-    owner: Owner | undefined
-    repo: Repo | undefined
-  }
-  setCurrentOwnerAndRepo: () => void
+  currentRepoUrl: string 
   issuesByStore: {
     [repoUrl: string]: Issue[]
   }
+  setCurrentRepoUrl: (url: string) => void
+  repoList: RepoInfo[];
+  addRepo: (repoInfo: RepoInfo) => void;
 }
 
 const useIssuesStore = create<IssuesState>()(
@@ -22,8 +20,8 @@ const useIssuesStore = create<IssuesState>()(
     persist(
       (set, get) => ({
         issuesByStore: {},
-        currentRepoUrl: '',
-        currentOwnerAndRepo: { owner: undefined, repo: undefined },
+        currentRepoUrl: '', 
+        repoList: [],       
         async getIssues(repoUrl: string) {
           const { issuesByStore } = get()
 
@@ -55,18 +53,19 @@ const useIssuesStore = create<IssuesState>()(
             },
           })
         },
-
-        setCurrentOwnerAndRepo() {
-          const { currentRepoUrl } = get()
-          const data = extractOwnerAndRepo(currentRepoUrl)
-
-          set({
-            currentOwnerAndRepo: {
-              owner: data?.owner,
-              repo: data?.repo,
-            },
-          })
+        addRepo: (repoInfo: RepoInfo) => {
+          if (!get().repoList.some(r => r.url === repoInfo.url)) {
+            set(state => ({
+              repoList: [...state.repoList, repoInfo]
+            }));
+          }
         },
+        setCurrentRepoUrl: (url) => {          
+          set(() => ({
+            currentRepoUrl: url
+          }))
+        }
+        
       }),
       { name: 'repository-issues' }
     )

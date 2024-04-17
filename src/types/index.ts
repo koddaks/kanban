@@ -121,12 +121,8 @@ export type Column = {
   title: string
 }
 
-export interface Owner {
-  name: string
-  link: string
-}
-
-export interface Repo {
-  name: string
-  link: string
+export interface RepoInfo {
+  owner: string;
+  repo: string;
+  url: string;
 }
