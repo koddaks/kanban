@@ -54,7 +54,7 @@ const useIssuesStore = create<IssuesState>()(
           })
         },
         addRepo: (repoInfo: RepoInfo) => {
-          if (!get().repoList.some(r => r.url === repoInfo.url)) {
+          if (!get().repoList.some(r => r.repoUrl === repoInfo.repoUrl)) {
             set(state => ({
               repoList: [...state.repoList, repoInfo]
             }));
