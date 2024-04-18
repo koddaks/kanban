@@ -49,13 +49,7 @@ export function BreadCrumbs() {
 
   return (
     <Breadcrumb>
-      <BreadcrumbList>
-        <BreadcrumbItem>
-          <BreadcrumbLink href="/">Home</BreadcrumbLink>
-        </BreadcrumbItem>
-        <BreadcrumbSeparator>
-          <Slash />
-        </BreadcrumbSeparator>
+      <BreadcrumbList>        
         {Object.keys(owners).map((owner) => (
           <React.Fragment key={owner}>
             <BreadcrumbItem className={activeOwner === owner ? 'text-blue-700' : ''}>
@@ -84,6 +78,13 @@ export function BreadCrumbs() {
             </BreadcrumbSeparator>
           </React.Fragment>
         ))}
+        <BreadcrumbItem>
+          <BreadcrumbLink href={ownerAndRepoData?.ownerUrl} target='_blank'>Link to owner: <span className="text-blue-600">{ownerAndRepoData?.owner}</span></BreadcrumbLink>
+          <BreadcrumbSeparator>
+          <Slash />
+        </BreadcrumbSeparator>
+          <BreadcrumbLink href={ownerAndRepoData?.repoUrl} target='_blank'>Link to repository: <span className="text-blue-600">{ownerAndRepoData?.repo}</span></BreadcrumbLink>
+        </BreadcrumbItem>
       </BreadcrumbList>
     </Breadcrumb>
   )
