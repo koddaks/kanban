@@ -19,9 +19,9 @@ export function InputWithButton() {
   }
 
   return (
-    <div className="m-0 flex w-full items-center space-x-2 px-[20px] pb-1">
-      <Input className="w-full" ref={inputRef} type="search" placeholder="Enter repository URL" />
-      <Button onClick={handleGetIssues} type="submit">
+    <div className="flex w-full gap-2">
+      <Input className="w-4/5" ref={inputRef} type="search" name='search-repo-issues' placeholder="Enter repository URL" />
+      <Button className="w-1/6" onClick={handleGetIssues} type="submit">
         Load issues
       </Button>
     </div>

@@ -4,7 +4,7 @@ import { KanbanBoard } from '@/components/KanbanBoard'
 
 export function Main() {
   return (
-    <main>
+    <main className="flex flex-col gap-2">
       <InputWithButton />
       <BreadCrumbs />
       <KanbanBoard />

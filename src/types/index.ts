@@ -30,7 +30,7 @@ export interface Issue {
     site_admin: boolean
   }
   labels: Label[]
-  state: string
+  state: State
   locked: boolean
   assignee: Assignee
   assignees: Assignee[]
@@ -60,6 +60,8 @@ export interface Issue {
   state_reason: string | null
   columnId?: string | number
 }
+
+type State = 'open' | 'closed'
 
 interface Label {
   id: number
@@ -121,12 +123,9 @@ export type Column = {
   title: string
 }
 
-export interface Owner {
-  name: string
-  link: string
-}
-
-export interface Repo {
-  name: string
-  link: string
+export interface RepoInfo {
+  owner: string;
+  ownerUrl: string
+  repo: string;
+  repoUrl: string;
 }
