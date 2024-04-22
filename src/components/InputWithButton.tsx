@@ -6,7 +6,7 @@ import { useRef } from 'react'
 
 export function InputWithButton() {
   const inputRef = useRef<HTMLInputElement | null>(null)
-  const getIssues = useIssuesStore((state) => state.getIssues)
+  const getIssues = useIssuesStore((state) => state.fetchIssues)
 
   const handleGetIssues = (): void => {
     const inputValue = inputRef?.current?.value
@@ -20,7 +20,13 @@ export function InputWithButton() {
 
   return (
     <div className="flex w-full gap-2">
-      <Input className="w-4/5" ref={inputRef} type="search" name='search-repo-issues' placeholder="Enter repository URL" />
+      <Input
+        className="w-4/5"
+        ref={inputRef}
+        type="search"
+        name="search-repo-issues"
+        placeholder="Enter repository URL"
+      />
       <Button className="w-1/6" onClick={handleGetIssues} type="submit">
         Load issues
       </Button>

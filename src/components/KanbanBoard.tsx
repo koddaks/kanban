@@ -28,21 +28,18 @@ export function KanbanBoard() {
 
   const [issueList, setIssueList] = useState<Issue[]>([])
 
-  const addRepo = useIssuesStore((state) => state.addRepo)
+  const setRepoToRepoList = useIssuesStore((state) => state.setRepoToRepoList)
   const ownerAndRepoInfo: RepoInfo | null = extractOwnerAndRepo(currentRepoUrl)
 
-  useEffect(() => {    
-    if(ownerAndRepoInfo) {
-      addRepo(ownerAndRepoInfo)
+  useEffect(() => {
+    if (ownerAndRepoInfo) {
+      setRepoToRepoList(ownerAndRepoInfo)
     }
   }, [currentRepoUrl])
 
-
-  useEffect(() => {    
+  useEffect(() => {
     setIssueList(issuesByStore[currentRepoUrl] || [])
   }, [currentRepoUrl, issuesByStore])
-
-
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -59,16 +56,16 @@ export function KanbanBoard() {
         onDragStart={onDragStart}
         onDragEnd={onDragEnd}
         onDragOver={onDragOver}
-      >                  
-            <SortableContext items={columnsId}>
-              {columns.map((col) => (
-                <ColumnContainer
-                  key={col.id}
-                  column={col}
-                  issues={issueList.filter((issue) => issue.columnId === col.id)}
-                />
-              ))}
-            </SortableContext>
+      >
+        <SortableContext items={columnsId}>
+          {columns.map((col) => (
+            <ColumnContainer
+              key={col.id}
+              column={col}
+              issues={issueList.filter((issue) => issue.columnId === col.id)}
+            />
+          ))}
+        </SortableContext>
         {createPortal(
           <DragOverlay>{activeTask && <IssueCard issue={activeTask} />}</DragOverlay>,
           document.body

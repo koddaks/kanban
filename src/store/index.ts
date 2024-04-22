@@ -5,25 +5,25 @@ import { devtools, persist } from 'zustand/middleware'
 import { sortIssuesByColumn } from '@/utils'
 import { getAllRepositoryIssues } from '@/api'
 
-interface IssuesState {
-  getIssues: (repoUrl: string) => Promise<void>
-  currentRepoUrl: string 
+interface IssuesStore {
+  fetchIssues: (repoUrl: string) => Promise<void>
+  currentRepoUrl: string
   issuesByStore: {
     [repoUrl: string]: Issue[]
   }
   setCurrentRepoUrl: (url: string) => void
-  repoList: RepoInfo[];
-  addRepo: (repoInfo: RepoInfo) => void;
+  repoList: RepoInfo[]
+  setRepoToRepoList: (repoInfo: RepoInfo) => void
 }
 
-const useIssuesStore = create<IssuesState>()(
+const useIssuesStore = create<IssuesStore>()(
   devtools(
     persist(
       (set, get) => ({
         issuesByStore: {},
-        currentRepoUrl: '', 
-        repoList: [],       
-        async getIssues(repoUrl: string) {
+        currentRepoUrl: '',
+        repoList: [],
+        async fetchIssues(repoUrl: string) {
           const { issuesByStore } = get()
 
           if (issuesByStore[repoUrl] && issuesByStore[repoUrl].length != 0) {
@@ -54,19 +54,18 @@ const useIssuesStore = create<IssuesState>()(
             },
           })
         },
-        addRepo: (repoInfo: RepoInfo) => {
-          if (!get().repoList.some(r => r.repoUrl === repoInfo.repoUrl)) {
-            set(state => ({
-              repoList: [...state.repoList, repoInfo]
-            }));
+        setRepoToRepoList: (repoInfo: RepoInfo) => {
+          if (!get().repoList.some((r) => r.repoUrl === repoInfo.repoUrl)) {
+            set((state) => ({
+              repoList: [...state.repoList, repoInfo],
+            }))
           }
         },
-        setCurrentRepoUrl: (url) => {          
+        setCurrentRepoUrl: (url) => {
           set(() => ({
-            currentRepoUrl: url
+            currentRepoUrl: url,
           }))
-        }
-        
+        },
       }),
       { name: 'repository-issues' }
     )
