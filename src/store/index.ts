@@ -1,8 +1,9 @@
 import { Issue, RepoInfo } from '@/types'
 import { create } from 'zustand'
 import { devtools, persist } from 'zustand/middleware'
-import { getAllRepositoryIssues } from './api'
+
 import { sortIssuesByColumn } from '@/utils'
+import { getAllRepositoryIssues } from '@/api'
 
 interface IssuesState {
   getIssues: (repoUrl: string) => Promise<void>
