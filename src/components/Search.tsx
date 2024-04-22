@@ -3,8 +3,9 @@ import { Input } from '@/components/ui/input'
 import useIssuesStore from '@/store'
 
 import { useRef } from 'react'
+import { BreadCrumbs } from './BreadCrumbs'
 
-export function InputWithButton() {
+export function Search() {
   const inputRef = useRef<HTMLInputElement | null>(null)
   const getIssues = useIssuesStore((state) => state.fetchIssues)
 
@@ -19,17 +20,20 @@ export function InputWithButton() {
   }
 
   return (
-    <div className="flex w-full gap-2">
-      <Input
-        className="w-4/5"
-        ref={inputRef}
-        type="search"
-        name="search-repo-issues"
-        placeholder="Enter repository URL"
-      />
-      <Button className="w-1/6" onClick={handleGetIssues} type="submit">
-        Load issues
-      </Button>
-    </div>
+    <>
+      <div className="flex w-full gap-2">
+        <Input
+          className="w-4/5"
+          ref={inputRef}
+          type="search"
+          name="search-repo-issues"
+          placeholder="Enter repository URL"
+        />
+        <Button className="w-1/6" onClick={handleGetIssues} type="submit">
+          Load issues
+        </Button>
+      </div>
+      <BreadCrumbs />
+    </>
   )
 }
