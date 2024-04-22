@@ -1,13 +1,14 @@
 import { Issue, IssueState } from '@/types'
 import { modifyUrlToApiUrl } from '@/utils'
 
+const queryParams = new URLSearchParams({
+  per_page: '20',
+  direction: 'desc',
+  state: `${IssueState.All}`,
+})
+
 export const getAllRepositoryIssues = async (repoUrl: string) => {
   try {
-    const queryParams = new URLSearchParams({
-      per_page: '20',
-      direction: 'desc',
-      state: `${IssueState.All}`,
-    })
     const url = `${modifyUrlToApiUrl(repoUrl)}/issues?${queryParams}`
 
     const response = await fetch(url, {
