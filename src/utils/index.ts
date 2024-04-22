@@ -71,17 +71,17 @@ export function extractOwnerAndRepo(url: string) {
     const owner = matches[1]
     const repo = matches[2]
     const ownerLink = `https://github.com/${owner}`
-    return { 
+    return {
       owner: owner,
       ownerUrl: ownerLink,
       repo: repo,
       repoUrl: url,
-     }
+    }
   } else {
     return null
   }
 }
 
-export function modifyGithubUrl(originalUrl: string) {
+export function modifyUrlToApiUrl(originalUrl: string) {
   return originalUrl.replace(/github\.com/, 'api.github.com/repos')
 }

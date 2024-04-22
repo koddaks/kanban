@@ -1,5 +1,5 @@
 import { Issue, IssueState } from '@/types'
-import { modifyGithubUrl } from '@/utils'
+import { modifyUrlToApiUrl } from '@/utils'
 
 export const getAllRepositoryIssues = async (repoUrl: string) => {
   try {
@@ -8,7 +8,7 @@ export const getAllRepositoryIssues = async (repoUrl: string) => {
       direction: 'desc',
       state: `${IssueState.All}`,
     })
-    const url = `${modifyGithubUrl(repoUrl)}/issues?${queryParams}`
+    const url = `${modifyUrlToApiUrl(repoUrl)}/issues?${queryParams}`
 
     const response = await fetch(url, {
       headers: {
