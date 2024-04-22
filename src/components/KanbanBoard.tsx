@@ -12,18 +12,20 @@ import {
 import { SortableContext, arrayMove } from '@dnd-kit/sortable'
 import { createPortal } from 'react-dom'
 import { ColumnContainer } from './ColumnContainer'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import useIssuesStore from '@/store'
 import { IssueCard } from './IssueCard'
 import { Issue, RepoInfo } from '@/types'
 import { extractOwnerAndRepo } from '@/utils'
 
+const columnsId = KANBAN_COLUMNS.map((col) => col.id)
+
 export function KanbanBoard() {
   const currentRepoUrl = useIssuesStore((state) => state.currentRepoUrl)
   const issuesByStore = useIssuesStore((state) => state.issuesByStore)
 
-  const [columns] = useState(KANBAN_COLUMNS)
-  const columnsId = useMemo(() => columns.map((col) => col.id), [columns])
+
+
   const [activeTask, setActiveTask] = useState<Issue | null>(null)
 
   const [issueList, setIssueList] = useState<Issue[]>([])
@@ -58,7 +60,7 @@ export function KanbanBoard() {
         onDragOver={onDragOver}
       >
         <SortableContext items={columnsId}>
-          {columns.map((col) => (
+          {KANBAN_COLUMNS.map((col) => (
             <ColumnContainer
               key={col.id}
               column={col}
