@@ -12,37 +12,26 @@ import {
 import { SortableContext, arrayMove } from '@dnd-kit/sortable'
 import { createPortal } from 'react-dom'
 import { ColumnContainer } from './ColumnContainer'
-import { useEffect, useState } from 'react'
-import useIssuesStore from '@/store'
 import { IssueCard } from './IssueCard'
-import { RepoInfo } from '@/types'
-import { extendIssuesWithStatus, extractOwnerAndRepo } from '@/utils'
 import { Issue, IssueStatus } from '@/types/issues'
+import useIssuesStore from '@/store'
+import { useEffect, useState } from 'react'
 
 const columnsId = KANBAN_COLUMNS.map((col) => col.id)
 
 export function KanbanBoard() {
-  const currentRepoUrl = useIssuesStore((state) => state.currentRepoUrl)
-  const issuesByStore = useIssuesStore((state) => state.issuesByStore)
+  const storeIssues = useIssuesStore((state) => state.getIssuesForRepo())
+  const setStoreIssues = useIssuesStore((state) => state.setIssuesForRepo)
+  const repoName = useIssuesStore((state) => state.currentRepoInfo?.repo)
+  const [issues, setIssues] = useState<Issue[]>(storeIssues)
+  const [activeIssue, setActiveIssue] = useState<Issue | null>(null)
 
 
-
-  const [activeTask, setActiveTask] = useState<Issue | null>(null)
-
-  const [issueList, setIssueList] = useState<Issue[]>([])
-
-  const setRepoToRepoList = useIssuesStore((state) => state.setRepoToRepoList)
-  const ownerAndRepoInfo: RepoInfo | null = extractOwnerAndRepo(currentRepoUrl)
 
   useEffect(() => {
-    if (ownerAndRepoInfo) {
-      setRepoToRepoList(ownerAndRepoInfo)
-    }
-  }, [currentRepoUrl])
-
-  useEffect(() => {
-    setIssueList(extendIssuesWithStatus(issuesByStore[currentRepoUrl]) || [])
-  }, [currentRepoUrl, issuesByStore])
+    if (!repoName) return
+    setIssues(storeIssues)
+  }, [issues, repoName, storeIssues])
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -65,12 +54,12 @@ export function KanbanBoard() {
             <ColumnContainer
               key={col.id}
               column={col}
-              issues={issueList.filter((issue) => issue.status === col.id)}
+              issues={issues.filter((issue) => issue.status === col.id)}
             />
           ))}
         </SortableContext>
         {createPortal(
-          <DragOverlay>{activeTask && <IssueCard issue={activeTask} />}</DragOverlay>,
+          <DragOverlay>{activeIssue && <IssueCard issue={activeIssue} />}</DragOverlay>,
           document.body
         )}
       </DndContext>
@@ -79,13 +68,13 @@ export function KanbanBoard() {
 
   function onDragStart(event: DragStartEvent) {
     if (event.active.data.current?.type === 'Issue') {
-      setActiveTask(event.active.data.current.issue)
+      setActiveIssue(event.active.data.current.issue)
       return
     }
   }
 
   function onDragEnd(event: DragEndEvent) {
-    setActiveTask(null)
+    setActiveIssue(null)
 
     const { active, over } = event
     if (!over) return
@@ -110,28 +99,29 @@ export function KanbanBoard() {
 
     if (!isActiveATask) return
     if (isActiveATask && isOverATask) {
-      setIssueList((issueList): Issue[] => {
-        const activeIndex = issueList.findIndex((t) => t.id === activeId)
-        const overIndex = issueList.findIndex((t) => t.id === overId)
+      setIssues((issues): Issue[] => {
+        const activeIndex = issues.findIndex((t) => t.id === activeId)
+        const overIndex = issues.findIndex((t) => t.id === overId)
 
-        if (issueList[activeIndex].status != issueList[overIndex].status) {
-          issueList[activeIndex].status = issueList[overIndex].status
-          return arrayMove(issueList, activeIndex, overIndex - 1)
+        if (issues[activeIndex].status != issues[overIndex].status) {
+          issues[activeIndex].status = issues[overIndex].status
+          return arrayMove(issues, activeIndex, overIndex - 1)
         }
 
-        return arrayMove(issueList, activeIndex, overIndex)
+        return arrayMove(issues, activeIndex, overIndex)
       })
     }
 
     const isOverAColumn = over.data.current?.type === 'Column'
 
     if (isActiveATask && isOverAColumn) {
-      setIssueList((issueList) => {
-        const activeIndex = issueList.findIndex((t) => t.id === activeId)   
+      setIssues((issues) => {
+        const activeIndex = issues.findIndex((t) => t.id === activeId)   
 
-        issueList[activeIndex].status = overId as IssueStatus 
-        return arrayMove(issueList, activeIndex, activeIndex)
+        issues[activeIndex].status = overId as IssueStatus 
+        return arrayMove(issues, activeIndex, activeIndex)
       })
     }
+    setStoreIssues(issues)
   }
 }

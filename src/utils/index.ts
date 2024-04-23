@@ -50,25 +50,24 @@ export function extendIssuesWithStatus(issues: Issue[]): Issue[] {
   })
 }
 
-export function extractOwnerAndRepo(url: string) {
+export function extractOwnerAndRepoFromUrl(url: string) {
   const regex = /github\.com\/([^/]+)\/([^/]+)/
   const matches = url.match(regex)
 
-  if (matches && matches.length === 3) {
+  if (matches) {
     const owner = matches[1]
     const repo = matches[2]
-    const ownerLink = `https://github.com/${owner}`
+
     return {
       owner: owner,
-      ownerUrl: ownerLink,
       repo: repo,
-      repoUrl: url,
     }
-  } else {
-    return null
   }
+  return null
 }
 
-export function modifyUrlToApiUrl(originalUrl: string) {
-  return originalUrl.replace(/github\.com/, 'api.github.com/repos')
+
+
+export function validateGithubUrl(repoUrl: string) {
+  return repoUrl.startsWith('https://github.com/') || repoUrl.startsWith('http://github.com')
 }

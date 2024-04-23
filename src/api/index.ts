@@ -1,6 +1,6 @@
 import { IssueGetState } from '@/types'
 import { Issue } from '@/types/issues'
-import { modifyUrlToApiUrl } from '@/utils'
+
 
 const queryParams = new URLSearchParams({
   per_page: '20',
@@ -8,9 +8,9 @@ const queryParams = new URLSearchParams({
   state: `${IssueGetState.All}`,
 })
 
-export const getAllRepositoryIssues = async (repoUrl: string) => {
+export const fetchIssues = async ({ owner, repo }: { owner: string; repo: string }) => {
   try {
-    const url = `${modifyUrlToApiUrl(repoUrl)}/issues?${queryParams}`
+    const url = `https://api.github.com/repos/${owner}/${repo}/issues?${queryParams}`
 
     const response = await fetch(url, {
       headers: {

@@ -1,90 +1,67 @@
-import React, { useState, useEffect } from 'react'
 import {
   Breadcrumb,
   BreadcrumbItem,
-  BreadcrumbLink,
   BreadcrumbList,
+  BreadcrumbPage,
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
+import { BreadcrumbDropdown } from '@/components/BreadcrumbDropdown'
 import useIssuesStore from '@/store'
 import { RepoInfo } from '@/types'
-import { ChevronDown, Slash } from 'lucide-react'
-import { extractOwnerAndRepo } from '@/utils'
 
-export function BreadCrumbs() {
-  const repoList = useIssuesStore((state) => state.repoList)
-  const setCurrentRepoUrl = useIssuesStore((state) => state.setCurrentRepoUrl)
+export function BreadCrumbs({ currentRepoInfo }: { currentRepoInfo: RepoInfo }) {
 
-  const currentRepoUrl = useIssuesStore((state) => state.currentRepoUrl)
-  const ownerAndRepoData = extractOwnerAndRepo(currentRepoUrl)
-  const [activeOwner, setActiveOwner] = useState<string>('')
-  const [activeRepo, setActiveRepo] = useState<string>('')
+  const { issuesByOwner, setCurrentRepoInfo } = useIssuesStore()
 
-  useEffect(() => {
-    if (ownerAndRepoData?.owner && ownerAndRepoData?.repo) {
-      setActiveOwner(ownerAndRepoData?.owner)
-      setActiveRepo(ownerAndRepoData?.repo)
-    }
-  }, [currentRepoUrl])
+  const owners = Object.keys(issuesByOwner)
+  const repos =  issuesByOwner[currentRepoInfo.owner] ?? {}
 
-
-
-  function handleSetCurrentRepoUrl(link: string) {
-    setCurrentRepoUrl(link)
+  function handleOwnerSelection(owner: string) {
+    const firstRepo = Object.keys(issuesByOwner[owner])[0]
+    const repoUrl = `https://github.com/${owner}/${firstRepo}`
+    setCurrentRepoInfo({
+      owner: owner,
+      repo: firstRepo,
+      url: repoUrl,
+    })
   }
 
-  const owners = repoList.reduce<Record<string, RepoInfo[]>>((acc, curr) => {
-    if (!acc[curr.owner]) {
-      acc[curr.owner] = []
-    }
-    acc[curr.owner].push(curr)
-    return acc
-  }, {})
+  function handleRepoSelection(repo: string) {
+    const repoUrl = `https://github.com/${currentRepoInfo.owner}/${repo}`
+    setCurrentRepoInfo({
+      owner: currentRepoInfo?.owner,
+      repo: repo,
+      url: repoUrl,
+    })
+  }
 
   return (
-    <Breadcrumb>
-      <BreadcrumbList>        
-        {Object.keys(owners).map((owner) => (
-          <React.Fragment key={owner}>
-            <BreadcrumbItem className={activeOwner === owner ? 'text-blue-700' : ''}>
-              <DropdownMenu>
-                <DropdownMenuTrigger type="button" className="flex items-center gap-1">
-                  {owner}
-                  <ChevronDown className="h-4 w-4" />
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  {owners[owner].map((repo) => (
-                    <DropdownMenuItem
-                      key={repo.repoUrl}                     
-                      className={
-                        activeOwner === owner && activeRepo === repo.repo ? 'bg-slate-300 rounded-sm' : ''
-                      }
-                      onClick={() => handleSetCurrentRepoUrl(repo.repoUrl)}
-                    >
-                      {repo.repo}
-                    </DropdownMenuItem>
-                  ))}
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator>
-              <Slash />
-            </BreadcrumbSeparator>
-          </React.Fragment>
-        ))}
+    <Breadcrumb className="md:py-4">
+      <BreadcrumbList>
         <BreadcrumbItem>
-          <BreadcrumbLink href={ownerAndRepoData?.ownerUrl} target='_blank'>Link to owner: <span className="text-blue-600">{ownerAndRepoData?.owner}</span></BreadcrumbLink>
-          <BreadcrumbSeparator>
-          <Slash />
-        </BreadcrumbSeparator>
-          <BreadcrumbLink href={ownerAndRepoData?.repoUrl} target='_blank'>Link to repository: <span className="text-blue-600">{ownerAndRepoData?.repo}</span></BreadcrumbLink>
+          {owners.length > 1 ? (
+            <BreadcrumbDropdown
+              items={owners}
+              onSelect={handleOwnerSelection}
+              label={currentRepoInfo.owner}
+            />
+          ) : (
+            currentRepoInfo.owner
+          )}
         </BreadcrumbItem>
+        <BreadcrumbSeparator />
+
+        <BreadcrumbPage>
+          {Object.keys(repos).length > 1 ? (
+            <BreadcrumbDropdown
+              items={Object.keys(repos)}
+              onSelect={handleRepoSelection}
+              label={currentRepoInfo.repo}
+            />
+          ) : (
+            currentRepoInfo.repo
+          )}
+        </BreadcrumbPage>
       </BreadcrumbList>
     </Breadcrumb>
   )

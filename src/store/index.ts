@@ -1,54 +1,42 @@
-import { RepoInfo } from '@/types'
 import { create } from 'zustand'
 import { devtools, persist } from 'zustand/middleware'
-
-import { getAllRepositoryIssues } from '@/api'
 import { Issue } from '@/types/issues'
+import { RepoInfo } from '@/types'
 
 interface IssuesStore {
-  fetchIssues: (repoUrl: string) => Promise<void>
-  currentRepoUrl: string
-  issuesByStore: {
-    [repoUrl: string]: Issue[]
-  }
-  setCurrentRepoUrl: (url: string) => void
-  repoList: RepoInfo[]
-  setRepoToRepoList: (repoInfo: RepoInfo) => void
+  currentRepoInfo: RepoInfo | null
+  issuesByOwner: Record<string, Record<string, Issue[]>>
+  setCurrentRepoInfo: (repoInfo: RepoInfo) => void
+  setIssuesForRepo: (issues: Issue[], repoInfo?: RepoInfo) => void
+  getIssuesForRepo: (repoInfo?: RepoInfo) => Issue[]
 }
 
 const useIssuesStore = create<IssuesStore>()(
   devtools(
     persist(
       (set, get) => ({
-        issuesByStore: {},
-        currentRepoUrl: '',
-        repoList: [],
-        async fetchIssues(repoUrl: string) {
-          const { issuesByStore } = get()
-
-          const data = await getAllRepositoryIssues(repoUrl)
-
-          if (!data) return       
-
-          set({
-            currentRepoUrl: repoUrl,
-            issuesByStore: {
-              ...issuesByStore,
-              [repoUrl]: data,
+        currentRepoInfo: null,
+        issuesByOwner: {},
+        setCurrentRepoInfo: (repoInfo) => set({ currentRepoInfo: repoInfo }),
+        setIssuesForRepo: (issues, repoInfo) => {
+          const info = repoInfo || get().currentRepoInfo
+          if (!info) return
+          const { owner, repo } = info
+          set((state) => ({
+            issuesByOwner: {
+              ...state.issuesByOwner,
+              [owner]: {
+                ...(state.issuesByOwner[owner] || {}),
+                [repo]: issues,
+              },
             },
-          })
-        },
-        setRepoToRepoList: (repoInfo: RepoInfo) => {
-          if (!get().repoList.some((r) => r.repoUrl === repoInfo.repoUrl)) {
-            set((state) => ({
-              repoList: [...state.repoList, repoInfo],
-            }))
-          }
-        },
-        setCurrentRepoUrl: (url) => {
-          set(() => ({
-            currentRepoUrl: url,
           }))
+        },
+        getIssuesForRepo: (repoInfo) => {
+          const info = repoInfo || get().currentRepoInfo
+          if (!info) return []
+          const { owner, repo } = info
+          return get().issuesByOwner[owner]?.[repo] || []
         },
       }),
       { name: 'repository-issues' }
