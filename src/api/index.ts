@@ -1,10 +1,10 @@
-import { Issue, IssueState } from '@/types'
+import { Issue, IssueGetState } from '@/types'
 import { modifyUrlToApiUrl } from '@/utils'
 
 const queryParams = new URLSearchParams({
   per_page: '20',
   direction: 'desc',
-  state: `${IssueState.All}`,
+  state: `${IssueGetState.All}`,
 })
 
 export const getAllRepositoryIssues = async (repoUrl: string) => {
