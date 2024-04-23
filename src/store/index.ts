@@ -33,13 +33,13 @@ const useIssuesStore = create<IssuesStore>()(
           if (!data) return
       
 
-          const sortedIssues = extendIssuesWithStatus(data)
+          const issuesWithStatus = extendIssuesWithStatus(data)
 
           set({
             currentRepoUrl: repoUrl,
             issuesByStore: {
               ...issuesByStore,
-              [repoUrl]: sortedIssues,
+              [repoUrl]: issuesWithStatus,
             },
           })
         },
