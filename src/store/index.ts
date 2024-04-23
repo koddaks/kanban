@@ -2,7 +2,6 @@ import { Issue, RepoInfo } from '@/types'
 import { create } from 'zustand'
 import { devtools, persist } from 'zustand/middleware'
 
-import { sortIssuesByColumn } from '@/utils'
 import { getAllRepositoryIssues } from '@/api'
 
 interface IssuesStore {
@@ -26,31 +25,15 @@ const useIssuesStore = create<IssuesStore>()(
         async fetchIssues(repoUrl: string) {
           const { issuesByStore } = get()
 
-          if (issuesByStore[repoUrl] && issuesByStore[repoUrl].length != 0) {
-            set({
-              currentRepoUrl: repoUrl,
-              issuesByStore: {
-                ...issuesByStore,
-              },
-            })
-            return
-          }
-
           const data = await getAllRepositoryIssues(repoUrl)
 
-          if (!data) return
-
-          const todoIssues: Issue[] = sortIssuesByColumn(data, 'todo')
-          const doingIssues: Issue[] = sortIssuesByColumn(data, 'doing')
-          const doneIssues: Issue[] = sortIssuesByColumn(data, 'done')
-
-          const sortedIssues = [...todoIssues, ...doingIssues, ...doneIssues]
+          if (!data) return       
 
           set({
             currentRepoUrl: repoUrl,
             issuesByStore: {
               ...issuesByStore,
-              [repoUrl]: sortedIssues,
+              [repoUrl]: data,
             },
           })
         },

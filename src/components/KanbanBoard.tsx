@@ -15,8 +15,8 @@ import { ColumnContainer } from './ColumnContainer'
 import { useEffect, useState } from 'react'
 import useIssuesStore from '@/store'
 import { IssueCard } from './IssueCard'
-import { Issue, RepoInfo } from '@/types'
-import { extractOwnerAndRepo } from '@/utils'
+import { Issue, IssueStatus, RepoInfo } from '@/types'
+import { extendIssuesWithStatus, extractOwnerAndRepo } from '@/utils'
 
 const columnsId = KANBAN_COLUMNS.map((col) => col.id)
 
@@ -40,7 +40,7 @@ export function KanbanBoard() {
   }, [currentRepoUrl])
 
   useEffect(() => {
-    setIssueList(issuesByStore[currentRepoUrl] || [])
+    setIssueList(extendIssuesWithStatus(issuesByStore[currentRepoUrl]) || [])
   }, [currentRepoUrl, issuesByStore])
 
   const sensors = useSensors(
@@ -64,7 +64,7 @@ export function KanbanBoard() {
             <ColumnContainer
               key={col.id}
               column={col}
-              issues={issueList.filter((issue) => issue.columnId === col.id)}
+              issues={issueList.filter((issue) => issue.status === col.id)}
             />
           ))}
         </SortableContext>
@@ -113,8 +113,8 @@ export function KanbanBoard() {
         const activeIndex = issueList.findIndex((t) => t.id === activeId)
         const overIndex = issueList.findIndex((t) => t.id === overId)
 
-        if (issueList[activeIndex].columnId != issueList[overIndex].columnId) {
-          issueList[activeIndex].columnId = issueList[overIndex].columnId
+        if (issueList[activeIndex].status != issueList[overIndex].status) {
+          issueList[activeIndex].status = issueList[overIndex].status
           return arrayMove(issueList, activeIndex, overIndex - 1)
         }
 
@@ -126,10 +126,9 @@ export function KanbanBoard() {
 
     if (isActiveATask && isOverAColumn) {
       setIssueList((issueList) => {
-        const activeIndex = issueList.findIndex((t) => t.id === activeId)
+        const activeIndex = issueList.findIndex((t) => t.id === activeId)   
 
-        issueList[activeIndex].columnId = overId
-        console.log('DROPPING ISSUE OVER COLUMN', { activeIndex })
+        issueList[activeIndex].status = overId as IssueStatus 
         return arrayMove(issueList, activeIndex, activeIndex)
       })
     }

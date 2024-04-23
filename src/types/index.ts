@@ -58,7 +58,7 @@ export interface Issue {
   performed_via_github_app: null
   milestone: null
   state_reason: string | null
-  columnId?: string | number
+  status: IssueStatus
 }
 
 type State = 'open' | 'closed'
@@ -110,7 +110,7 @@ interface Repository {
   }
 }
 
-export enum IssueState {
+export enum IssueGetState {
   All = 'all',
   Open = 'open',
   Closed = 'closed',
@@ -124,8 +124,10 @@ export type Column = {
 }
 
 export interface RepoInfo {
-  owner: string;
+  owner: string
   ownerUrl: string
-  repo: string;
-  repoUrl: string;
+  repo: string
+  repoUrl: string
 }
+
+export type IssueStatus = 'todo' | 'in-progress' | 'done'
