@@ -23,16 +23,13 @@ const columnsId = KANBAN_COLUMNS.map((col) => col.id)
 
 export function KanbanBoard() {
   const setIssuesForRepo = useIssuesStore((state) => state.setIssuesForRepo)
+  const setRepoToRepoList = useIssuesStore((state) => state.setRepoToRepoList)
   const currentRepoUrl = useIssuesStore((state) => state.currentRepoUrl)
   const issuesByStore = useIssuesStore((state) => state.issuesByStore)
 
-
-
-  const [activeTask, setActiveTask] = useState<Issue | null>(null)
-
+  const [activeIssue, setActiveIssue] = useState<Issue | null>(null)
   const [issueList, setIssueList] = useState<Issue[]>([])
-
-  const setRepoToRepoList = useIssuesStore((state) => state.setRepoToRepoList)
+  
   const ownerAndRepoInfo: RepoInfo | null = extractOwnerAndRepo(currentRepoUrl)
 
   useEffect(() => {
@@ -71,7 +68,7 @@ export function KanbanBoard() {
           ))}
         </SortableContext>
         {createPortal(
-          <DragOverlay>{activeTask && <IssueCard issue={activeTask} />}</DragOverlay>,
+          <DragOverlay>{activeIssue && <IssueCard issue={activeIssue} />}</DragOverlay>,
           document.body
         )}
       </DndContext>
@@ -80,13 +77,13 @@ export function KanbanBoard() {
 
   function onDragStart(event: DragStartEvent) {
     if (event.active.data.current?.type === 'Issue') {
-      setActiveTask(event.active.data.current.issue)
+      setActiveIssue(event.active.data.current.issue)
       return
     }
   }
 
   function onDragEnd(event: DragEndEvent) {
-    setActiveTask(null)
+    setActiveIssue(null)
     setIssuesForRepo(issueList)
 
     const { active, over } = event
