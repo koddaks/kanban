@@ -1,4 +1,4 @@
-import { Issue, IssueState } from '@/types'
+import { Issue, IssueGetState, IssueStatus } from '@/types'
 
 export function getTimeStringSinceIssueOpened(createdAt: string): string {
   const postDate = new Date(createdAt)
@@ -19,48 +19,34 @@ export function getOpenedIssuesWithAssignee(issues: Issue[]): Issue[] {
 
   return issues.filter((issue: Issue) => {
     const issueDate = new Date(issue.created_at).getTime()
-    return issueDate >= threeDaysAgo && issue.state !== IssueState.Closed && !issue.assignee
+    return issueDate >= threeDaysAgo && issue.state !== IssueGetState.Closed && !issue.assignee
   })
 }
 
 export function getClosedIssues(issues: Issue[]): Issue[] {
-  return issues.filter((issue: Issue) => issue.state === IssueState.Closed)
+  return issues.filter((issue: Issue) => issue.state === IssueGetState.Closed)
 }
 
 export function getInProgressIssues(issues: Issue[]): Issue[] {
-  return issues.filter((issue: Issue) => issue.state === IssueState.Open && issue.assignee !== null)
+  return issues.filter(
+    (issue: Issue) => issue.state === IssueGetState.Open && issue.assignee !== null
+  )
 }
 
-export function sortIssuesByColumn(issues: Issue[], column: string | number): Issue[] {
-  let sortedIssues: Issue[] = []
+export function extendIssuesWithStatus(issues: Issue[]): Issue[] {
+  return issues.map((issue) => {
+    let status: IssueStatus
 
-  switch (column) {
-    case 'todo':
-      sortedIssues = getOpenedIssuesWithAssignee(issues).map((issue) => ({
-        ...issue,
-        columnId: 'todo',
-      }))
-      break
-    case 'done':
-      sortedIssues = getClosedIssues(issues).map((issue) => ({
-        ...issue,
-        columnId: 'done',
-      }))
-      break
-    case 'doing':
-      sortedIssues = getInProgressIssues(issues).map((issue) => ({
-        ...issue,
-        columnId: 'doing',
-      }))
-      break
-    default:
-      sortedIssues = issues.map((issue) => ({
-        ...issue,
-        columnId: 'all',
-      }))
-  }
+    if (issue.state === 'closed') {
+      status = 'done'
+    } else if (issue.assignee) {
+      status = 'in-progress'
+    } else {
+      status = 'todo'
+    }
 
-  return sortedIssues
+    return { ...issue, status }
+  })
 }
 
 export function extractOwnerAndRepo(url: string) {
