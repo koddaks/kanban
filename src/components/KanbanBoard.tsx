@@ -15,8 +15,9 @@ import { ColumnContainer } from './ColumnContainer'
 import { useEffect, useState } from 'react'
 import useIssuesStore from '@/store'
 import { IssueCard } from './IssueCard'
-import { Issue, IssueStatus, RepoInfo } from '@/types'
+import { RepoInfo } from '@/types'
 import { extendIssuesWithStatus, extractOwnerAndRepo } from '@/utils'
+import { Issue, IssueStatus } from '@/types/issues'
 
 const columnsId = KANBAN_COLUMNS.map((col) => col.id)
 

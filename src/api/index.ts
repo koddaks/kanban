@@ -1,4 +1,5 @@
-import { Issue, IssueGetState } from '@/types'
+import { IssueGetState } from '@/types'
+import { Issue } from '@/types/issues'
 import { modifyUrlToApiUrl } from '@/utils'
 
 const queryParams = new URLSearchParams({

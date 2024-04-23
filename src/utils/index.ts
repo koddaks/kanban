@@ -1,4 +1,5 @@
-import { Issue, IssueGetState, IssueStatus } from '@/types'
+import { IssueGetState } from '@/types'
+import { Issue, IssueStatus } from '@/types/issues'
 
 export function getTimeStringSinceIssueOpened(createdAt: string): string {
   const postDate = new Date(createdAt)

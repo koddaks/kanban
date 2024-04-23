@@ -1,8 +1,9 @@
-import { Issue, RepoInfo } from '@/types'
+import { RepoInfo } from '@/types'
 import { create } from 'zustand'
 import { devtools, persist } from 'zustand/middleware'
 
 import { getAllRepositoryIssues } from '@/api'
+import { Issue } from '@/types/issues'
 
 interface IssuesStore {
   fetchIssues: (repoUrl: string) => Promise<void>
