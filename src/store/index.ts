@@ -1,9 +1,9 @@
-import { Issue, RepoInfo } from '@/types'
+import { RepoInfo } from '@/types'
 import { create } from 'zustand'
 import { devtools, persist } from 'zustand/middleware'
-
-import { sortIssuesByColumn } from '@/utils'
-import { getAllRepositoryIssues } from '@/api'
+import { extendIssuesWithStatus } from '@/utils'
+import { fetchIssues } from '@/api'
+import { Issue } from '@/types/issues'
 
 interface IssuesStore {
   fetchIssues: (repoUrl: string) => Promise<void>
@@ -14,6 +14,8 @@ interface IssuesStore {
   setCurrentRepoUrl: (url: string) => void
   repoList: RepoInfo[]
   setRepoToRepoList: (repoInfo: RepoInfo) => void
+
+  setIssuesForRepo: (issues: Issue[]) => void
 }
 
 const useIssuesStore = create<IssuesStore>()(
@@ -26,31 +28,27 @@ const useIssuesStore = create<IssuesStore>()(
         async fetchIssues(repoUrl: string) {
           const { issuesByStore } = get()
 
-          if (issuesByStore[repoUrl] && issuesByStore[repoUrl].length != 0) {
-            set({
-              currentRepoUrl: repoUrl,
-              issuesByStore: {
-                ...issuesByStore,
-              },
-            })
-            return
-          }
-
-          const data = await getAllRepositoryIssues(repoUrl)
+          const data = await fetchIssues(repoUrl)
 
           if (!data) return
+      
 
-          const todoIssues: Issue[] = sortIssuesByColumn(data, 'todo')
-          const doingIssues: Issue[] = sortIssuesByColumn(data, 'doing')
-          const doneIssues: Issue[] = sortIssuesByColumn(data, 'done')
-
-          const sortedIssues = [...todoIssues, ...doingIssues, ...doneIssues]
+          const sortedIssues = extendIssuesWithStatus(data)
 
           set({
             currentRepoUrl: repoUrl,
             issuesByStore: {
               ...issuesByStore,
               [repoUrl]: sortedIssues,
+            },
+          })
+        },
+        setIssuesForRepo: (issues) => {
+          const { issuesByStore, currentRepoUrl } = get()
+          set({            
+            issuesByStore: {
+              ...issuesByStore,
+              [currentRepoUrl]: issues,
             },
           })
         },
