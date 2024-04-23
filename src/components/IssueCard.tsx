@@ -1,4 +1,4 @@
-import { Issue } from '@/types'
+import { Issue } from '@/types/issues'
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { cn } from '@/lib/utils'
@@ -7,14 +7,16 @@ import { CSS } from '@dnd-kit/utilities'
 import { getTimeStringSinceIssueOpened } from '@/utils'
 
 
+
+
 type IssueCardProps = {
   issue: Issue
 }
 
 export function IssueCard({ issue }: IssueCardProps) {
   const { html_url, title, number, created_at, state } = issue
-  const { login, type, avatar_url } = issue.user
-  const userUrl = issue.user.html_url
+
+  const userUrl = issue?.user?.html_url
 
   const { setNodeRef, attributes, listeners, transform, transition, isDragging } = useSortable({
     id: issue.id,
@@ -45,13 +47,13 @@ export function IssueCard({ issue }: IssueCardProps) {
             {title}
           </a>          
         </CardTitle>
-        <p className="text-xs">Opened by {login} | {type}</p>
+        <p className="text-xs">Opened by {issue?.user?.login} | {issue?.user?.type}</p>
         <div className=" w-1/3 flex flex-col items-center gap-1">
           <Avatar className="size-8 rounded-full text-muted-foreground md:size-12">
-            <AvatarImage src={avatar_url} alt="avatar image" />
+            <AvatarImage src={issue?.user?.avatar_url} alt="avatar image" />
             <AvatarFallback>{userUrl}</AvatarFallback>
           </Avatar>
-          <p className="text-[10px] leading-4 font-bold">{login}</p>
+          <p className="text-[10px] leading-4 font-bold">{issue?.user?.login}</p>
         </div>
       </CardHeader>
       <CardContent className="flex flex-col gap-2 items-center">

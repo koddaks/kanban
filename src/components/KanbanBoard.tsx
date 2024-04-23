@@ -15,12 +15,14 @@ import { ColumnContainer } from './ColumnContainer'
 import { useEffect, useState } from 'react'
 import useIssuesStore from '@/store'
 import { IssueCard } from './IssueCard'
-import { Issue, RepoInfo } from '@/types'
+import { RepoInfo } from '@/types'
 import { extractOwnerAndRepo } from '@/utils'
+import { Issue, IssueStatus } from '@/types/issues'
 
 const columnsId = KANBAN_COLUMNS.map((col) => col.id)
 
 export function KanbanBoard() {
+  const setIssuesForRepo = useIssuesStore((state) => state.setIssuesForRepo)
   const currentRepoUrl = useIssuesStore((state) => state.currentRepoUrl)
   const issuesByStore = useIssuesStore((state) => state.issuesByStore)
 
@@ -64,7 +66,7 @@ export function KanbanBoard() {
             <ColumnContainer
               key={col.id}
               column={col}
-              issues={issueList.filter((issue) => issue.columnId === col.id)}
+              issues={issueList.filter((issue) => issue.status === col.id)}
             />
           ))}
         </SortableContext>
@@ -85,6 +87,7 @@ export function KanbanBoard() {
 
   function onDragEnd(event: DragEndEvent) {
     setActiveTask(null)
+    setIssuesForRepo(issueList)
 
     const { active, over } = event
     if (!over) return
@@ -93,6 +96,8 @@ export function KanbanBoard() {
     const overId = over.id
 
     if (activeId === overId) return
+
+    
   }
 
   function onDragOver(event: DragOverEvent) {
@@ -113,8 +118,8 @@ export function KanbanBoard() {
         const activeIndex = issueList.findIndex((t) => t.id === activeId)
         const overIndex = issueList.findIndex((t) => t.id === overId)
 
-        if (issueList[activeIndex].columnId != issueList[overIndex].columnId) {
-          issueList[activeIndex].columnId = issueList[overIndex].columnId
+        if (issueList[activeIndex].status != issueList[overIndex].status) {
+          issueList[activeIndex].status = issueList[overIndex].status
           return arrayMove(issueList, activeIndex, overIndex - 1)
         }
 
@@ -127,11 +132,10 @@ export function KanbanBoard() {
     if (isActiveATask && isOverAColumn) {
       setIssueList((issueList) => {
         const activeIndex = issueList.findIndex((t) => t.id === activeId)
-
-        issueList[activeIndex].columnId = overId
-        console.log('DROPPING ISSUE OVER COLUMN', { activeIndex })
+        issueList[activeIndex].status = overId as IssueStatus
+    
         return arrayMove(issueList, activeIndex, activeIndex)
       })
-    }
+    }   
   }
 }

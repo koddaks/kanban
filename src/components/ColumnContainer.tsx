@@ -1,9 +1,10 @@
 import { Table, TableBody, TableHead } from '@/components/ui/table'
 import { IssueCard } from './IssueCard'
 import { useMemo } from 'react'
-import { Column, Issue } from '@/types'
+import { Column} from '@/types'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { SortableContext, useSortable } from '@dnd-kit/sortable'
+import { Issue } from '@/types/issues'
 
 type ColumnContainerProps = {
   column: Column
