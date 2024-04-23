@@ -1,4 +1,5 @@
-import { Issue, IssueGetState } from '@/types'
+import { IssueGetState} from '@/types'
+import { Issue } from '@/types/issues'
 import { modifyUrlToApiUrl } from '@/utils'
 
 const queryParams = new URLSearchParams({
@@ -7,7 +8,7 @@ const queryParams = new URLSearchParams({
   state: `${IssueGetState.All}`,
 })
 
-export const getAllRepositoryIssues = async (repoUrl: string) => {
+export const fetchIssues = async (repoUrl: string) => {
   try {
     const url = `${modifyUrlToApiUrl(repoUrl)}/issues?${queryParams}`
 
