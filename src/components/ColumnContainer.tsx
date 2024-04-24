@@ -12,7 +12,7 @@ type ColumnContainerProps = {
 }
 
 export function ColumnContainer({ column, issues }: ColumnContainerProps) {
-  const tasksIds = useMemo(() => {
+  const issuesIds = useMemo(() => {
     return issues.map((issue) => issue.id)
   }, [issues])
 
@@ -32,7 +32,7 @@ export function ColumnContainer({ column, issues }: ColumnContainerProps) {
       <TableBody className="flex w-full flex-col">
         <ScrollArea className="h-[80vh] w-full rounded-b-md border bg-slate-300 p-4">
           <div className="flex flex-col gap-4 items-center">
-            <SortableContext items={tasksIds}>
+            <SortableContext items={issuesIds}>
               {issues?.map((issue) => <IssueCard key={issue.id} issue={issue} />)}
             </SortableContext>
           </div>
