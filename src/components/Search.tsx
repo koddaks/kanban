@@ -7,12 +7,12 @@ import { BreadCrumbs } from './BreadCrumbs'
 
 export function Search() {
   const inputRef = useRef<HTMLInputElement | null>(null)
-  const getIssues = useIssuesStore((state) => state.fetchIssues)
+  const fetchIssues = useIssuesStore((state) => state.fetchIssues)
 
   const handleGetIssues = (): void => {
     const inputValue = inputRef?.current?.value
     if (inputValue !== undefined && inputValue !== '') {
-      getIssues(inputValue)
+      fetchIssues(inputValue)
       if (inputRef.current) {
         inputRef.current.value = ''
       }

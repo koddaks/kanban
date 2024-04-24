@@ -1,11 +1,10 @@
-import { IssueGetState} from '@/types'
-import { Issue } from '@/types/issues'
+import { ResponseIssue } from '@/types/issues'
 import { modifyUrlToApiUrl } from '@/utils'
 
 const queryParams = new URLSearchParams({
   per_page: '20',
   direction: 'desc',
-  state: `${IssueGetState.All}`,
+  state: `all`,
 })
 
 export const fetchIssues = async (repoUrl: string) => {
@@ -20,7 +19,7 @@ export const fetchIssues = async (repoUrl: string) => {
     if (!response.ok) {
       throw new Error('Network response was not ok')
     }
-    const data: Issue[] = await response.json()
+    const data: ResponseIssue[] = await response.json()
     return data
   } catch (error) {
     console.error('Error fetching data:', error)

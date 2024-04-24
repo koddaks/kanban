@@ -1,9 +1,3 @@
-export enum IssueGetState {
-  All = 'all',
-  Open = 'open',
-  Closed = 'closed',
-}
-
 export type Id = string | number
 
 export type Column = {

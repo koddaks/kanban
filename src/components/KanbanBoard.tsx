@@ -15,7 +15,7 @@ import { ColumnContainer } from './ColumnContainer'
 import { useEffect, useState } from 'react'
 import useIssuesStore from '@/store'
 import { IssueCard } from './IssueCard'
-import { RepoInfo } from '@/types'
+
 import { extractOwnerAndRepo } from '@/utils'
 import { Issue, IssueStatus } from '@/types/issues'
 
@@ -30,7 +30,7 @@ export function KanbanBoard() {
   const [activeIssue, setActiveIssue] = useState<Issue | null>(null)
   const [issueList, setIssueList] = useState<Issue[]>([])
   
-  const ownerAndRepoInfo: RepoInfo | null = extractOwnerAndRepo(currentRepoUrl)
+  const ownerAndRepoInfo = extractOwnerAndRepo(currentRepoUrl)
 
   useEffect(() => {
     if (ownerAndRepoInfo) {
