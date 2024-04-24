@@ -14,7 +14,7 @@ import useIssuesStore from '@/store'
 import { RepoInfo } from '@/types'
 import { extractOwnerAndRepo } from '@/utils'
 
-import { ChevronDown, Slash } from 'lucide-react'
+import { ChevronDown, Link as LinkIcon, Slash } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { Button } from './ui/button'
 
@@ -59,7 +59,7 @@ export function BreadCrumbs({ currentRepoUrl }: { currentRepoUrl: string }) {
   }
 
   return (
-    <div className="flex flex-row justify-between items-center">
+    <div className="flex flex-row items-center justify-between">
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
@@ -109,14 +109,16 @@ export function BreadCrumbs({ currentRepoUrl }: { currentRepoUrl: string }) {
       </Breadcrumb>
 
       <div className="flex w-1/3 flex-row gap-2">
-        <Button className="w-1/2 h-6" asChild>
-          <a href={currentRepoInfo?.ownerUrl} target="_blank">
-            {currentRepoInfo?.owner}
+        <Button variant="link" className="h-6 w-1/2" asChild>
+          <a className="flex gap-1" href={currentRepoInfo?.ownerUrl} target="_blank">
+            <p>{currentRepoInfo?.owner}</p>
+            <LinkIcon size={16}/>
           </a>
         </Button>
-        <Button className="w-1/2 h-6" asChild>
-          <a href={currentRepoInfo?.repoUrl} target="_blank">
-            {currentRepoInfo?.repo}
+        <Button variant="link" className="h-6 w-1/2" asChild>
+          <a className="flex gap-1" href={currentRepoInfo?.repoUrl} target="_blank">
+            <p>{currentRepoInfo?.repo}</p>
+            <LinkIcon size={16}/>
           </a>
         </Button>
       </div>
