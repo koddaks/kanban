@@ -76,7 +76,7 @@ export function BreadCrumbs() {
         <BreadcrumbItem>
           <DropdownMenu>
             <DropdownMenuTrigger type="button" className="flex items-center gap-1">
-              {activeOwner ? activeOwner : (currentRepoInfo?.owner)}
+              {activeOwner}
               <ChevronDown className="h-4 w-4" />
             </DropdownMenuTrigger>
             <DropdownMenuContent>
