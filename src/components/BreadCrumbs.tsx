@@ -25,26 +25,6 @@ export function BreadCrumbs({currentRepoUrl}: {currentRepoUrl: string}) {
 
   const repoList = useIssuesStore((state) => state.repoList);
   const currentRepoInfo = extractOwnerAndRepo(currentRepoUrl);
-  console.log(currentRepoInfo?.repo);
-
-  useEffect(() => {
-    if (currentRepoInfo && !activeOwner) {
-      setActiveOwner(currentRepoInfo.owner);
-      const reposForOwner = repoList.filter((repo) => repo.owner === currentRepoInfo.owner);
-      if (reposForOwner.length > 0) {
-        setActiveRepo(reposForOwner[0].repo);
-      }
-    }
-  }, [currentRepoInfo, activeOwner, repoList]);
-
-  useEffect(() => {  
-    const repoInfo = extractOwnerAndRepo(currentRepoUrl);
-    if (repoInfo && repoInfo.owner !== activeOwner) {
-      setActiveOwner(repoInfo.owner);
-      setActiveRepo(repoInfo.repo);
-    }
-  }, [currentRepoUrl, activeOwner]);
-
 
   useEffect(() => {    
     if(currentRepoInfo) {
