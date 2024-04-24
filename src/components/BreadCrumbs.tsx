@@ -14,7 +14,7 @@ import useIssuesStore from '@/store'
 import { RepoInfo } from '@/types'
 import { extractOwnerAndRepo } from '@/utils'
 
-import { ChevronDown, Link, Slash } from 'lucide-react'
+import { ChevronDown, Slash } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { Button } from './ui/button'
 
