@@ -35,7 +35,7 @@ export function BreadCrumbs({currentRepoUrl}: {currentRepoUrl: string}) {
         setActiveRepo(reposForOwner[0].repo);
       }
     }
-  }, [currentRepoInfo, activeOwner, repoList, currentRepoInfo?.repo]);
+  }, [currentRepoInfo, activeOwner, repoList]);
 
   useEffect(() => {  
     const repoInfo = extractOwnerAndRepo(currentRepoUrl);
