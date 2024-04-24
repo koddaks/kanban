@@ -18,14 +18,14 @@ import { ChevronDown, Slash } from 'lucide-react'
 import { useEffect, useState } from 'react'
 
 
-export function BreadCrumbs() {
-  const currentRepoUrl = useIssuesStore((state) => state.currentRepoUrl);
+export function BreadCrumbs({currentRepoUrl}: {currentRepoUrl: string}) {
   const setCurrentRepoUrl = useIssuesStore((state) => state.setCurrentRepoUrl);
   const [activeOwner, setActiveOwner] = useState<string>('');
   const [activeRepo, setActiveRepo] = useState<string>('');
 
   const repoList = useIssuesStore((state) => state.repoList);
   const currentRepoInfo = extractOwnerAndRepo(currentRepoUrl);
+  console.log(currentRepoInfo?.repo);
 
   useEffect(() => {
     if (currentRepoInfo && !activeOwner) {
@@ -35,7 +35,7 @@ export function BreadCrumbs() {
         setActiveRepo(reposForOwner[0].repo);
       }
     }
-  }, [currentRepoInfo, activeOwner, repoList]);
+  }, [currentRepoInfo, activeOwner, repoList, currentRepoInfo?.repo]);
 
   useEffect(() => {  
     const repoInfo = extractOwnerAndRepo(currentRepoUrl);
@@ -44,6 +44,15 @@ export function BreadCrumbs() {
       setActiveRepo(repoInfo.repo);
     }
   }, [currentRepoUrl, activeOwner]);
+
+
+  useEffect(() => {    
+    if(currentRepoInfo) {
+      setActiveOwner(currentRepoInfo?.owner);
+      setActiveRepo(currentRepoInfo?.repo);
+    }     
+    
+  }, [currentRepoUrl]);
 
   const issuesByOwner: Record<string, Record<string, RepoInfo>> = {};
   repoList.forEach((repo) => {

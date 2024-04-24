@@ -6,6 +6,8 @@ import { useRef } from 'react'
 import { BreadCrumbs } from './BreadCrumbs'
 
 export function Search() {
+  const currentRepoUrl = useIssuesStore((state) => state.currentRepoUrl);
+
   const inputRef = useRef<HTMLInputElement | null>(null)
   const fetchIssues = useIssuesStore((state) => state.fetchIssues)
 
@@ -33,7 +35,7 @@ export function Search() {
           Load issues
         </Button>
       </div>
-      <BreadCrumbs />
+      <BreadCrumbs currentRepoUrl={currentRepoUrl} />
     </>
   )
 }
