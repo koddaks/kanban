@@ -14,7 +14,6 @@ interface IssuesStore {
   setCurrentRepoUrl: (url: string) => void
   repoList: RepoInfo[]
   setRepoToRepoList: (repoInfo: RepoInfo) => void
-
   setIssuesForRepo: (issues: Issue[]) => void
 }
 
