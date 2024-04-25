@@ -18,7 +18,7 @@ import { ChevronDown, Link as LinkIcon, Slash } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { Button } from './ui/button'
 
-export function BreadCrumbs({ currentRepoUrl }: { currentRepoUrl: string }) {
+export function BreadCrumbs({ currentRepoUrl }: { currentRepoUrl: string }) {  
   const setCurrentRepoUrl = useIssuesStore((state) => state.setCurrentRepoUrl)
   const [activeOwner, setActiveOwner] = useState<string>('')
   const [activeRepo, setActiveRepo] = useState<string>('')
@@ -65,7 +65,7 @@ export function BreadCrumbs({ currentRepoUrl }: { currentRepoUrl: string }) {
           <BreadcrumbItem>
             <DropdownMenu>
               <DropdownMenuTrigger type="button" className="flex items-center gap-1">
-                {activeOwner}
+                {currentRepoUrl ? activeOwner : 'owner'}
                 <ChevronDown className="h-4 w-4" />
               </DropdownMenuTrigger>
               <DropdownMenuContent>
@@ -84,7 +84,7 @@ export function BreadCrumbs({ currentRepoUrl }: { currentRepoUrl: string }) {
           <BreadcrumbSeparator>
             <Slash />
           </BreadcrumbSeparator>
-          {activeOwner && (
+          {activeOwner ? (
             <BreadcrumbItem>
               <DropdownMenu>
                 <DropdownMenuTrigger type="button" className="flex items-center gap-1">
@@ -104,11 +104,11 @@ export function BreadCrumbs({ currentRepoUrl }: { currentRepoUrl: string }) {
                 </DropdownMenuContent>
               </DropdownMenu>
             </BreadcrumbItem>
-          )}
+          ) : 'repo'}
         </BreadcrumbList>
       </Breadcrumb>
 
-      <div className="flex w-1/3 flex-row gap-2">
+     { currentRepoUrl && <div className="flex w-1/3 flex-row gap-2">
         <Button variant="link" className="h-6 w-1/2" asChild>
           <a className="flex gap-1" href={currentRepoInfo?.ownerUrl} target="_blank">
             <p>{currentRepoInfo?.owner}</p>
@@ -121,7 +121,7 @@ export function BreadCrumbs({ currentRepoUrl }: { currentRepoUrl: string }) {
             <LinkIcon size={16}/>
           </a>
         </Button>
-      </div>
+      </div>}
     </div>
   )
 }
