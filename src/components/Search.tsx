@@ -23,38 +23,33 @@ export function Search() {
   const [isLoading, setIsLoading] = useState(false)
 
   const handleSubmit = async () => {
-    setError(null)
-    setIsLoading(true)
-    const isGutHubUrl = validateGithubUrl(inputValue)
-
-    if (!isGutHubUrl) {
-      setError('Invalid GitHub URL')
-      setIsLoading(false)
-      return
+    setError(null);
+    setIsLoading(true);
+  
+    try {
+      const isValidUrl = validateGithubUrl(inputValue);
+      if (!isValidUrl) {
+        throw new Error('Invalid GitHub URL');
+      }
+  
+      const issues = await fetchIssues(inputValue);
+  
+      if (issues?.length === 0) {
+        throw new Error('The list of issues is empty');
+      }
+  
+      setInputValue('');
+      setCurrentRepoUrl(inputValue);
+      setIssuesByStore(extendIssuesWithStatus(issues));
+    } catch (error) {
+      if (error instanceof Error) {
+        setError(error.message);
+      } else {
+        setError('An unknown error occurred');
+      }
+    } finally {
+      setIsLoading(false);
     }
-
-    const data = await fetchIssues(inputValue)    
-
-  if (!data) {
-      setError("The network's response was out of order. Check that the entered data is correct")
-      setIsLoading(false)
-      return
-    }
-
-    if (data.length === 0) {
-      setError("The list of issues is empty")
-      setInputValue('')
-      setIsLoading(false)
-      return
-    }
-
-    if (data) {
-      setInputValue('')
-      setCurrentRepoUrl(inputValue)
-      setIssuesByStore(extendIssuesWithStatus(data))
-    }
-
-    setIsLoading(false)
   }
 
   return (
