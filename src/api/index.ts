@@ -8,24 +8,17 @@ const queryParams = new URLSearchParams({
 })
 
 export const fetchIssues = async (repoUrl: string) => {
-  try {
-    const url = `${modifyUrlToApiUrl(repoUrl)}/issues?${queryParams}`
+  const url = `${modifyUrlToApiUrl(repoUrl)}/issues?${queryParams}`;
+  const response = await fetch(url, {
+    headers: {
+      accept: 'application/vnd.github+json',
+    },
+  });
 
-    const response = await fetch(url, {
-      headers: {
-        accept: 'application/vnd.github+json',
-      },
-    })
-
-    if (!response.ok) {
-      throw new Error('Network response was not ok')
-    }
- 
-    const data: ResponseIssue[] = await response.json()
-
-    return data
-
-  } catch (error) {
-    console.error('Error fetching data:', error)
+  if (!response.ok) {
+    throw new Error(`Network response was not ok: ${response.status}`);
   }
-}
+
+  const data: ResponseIssue[] = await response.json();
+  return data;
+};
