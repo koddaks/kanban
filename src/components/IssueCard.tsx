@@ -12,6 +12,7 @@ type IssueCardProps = {
 
 export function IssueCard({ issue }: IssueCardProps) {
   const { html_url, title, number, created_at, state } = issue
+  const { avatar_url, login, type } = issue.user ?? {}
 
   const userUrl = issue?.user?.html_url
 
@@ -34,7 +35,14 @@ export function IssueCard({ issue }: IssueCardProps) {
       style={style}
       {...attributes}
       {...listeners}
-      className={cn('w-full', 'break-all', 'sm:max-w-52', 'md:max-w-56', 'lg:max-w-72', 'xl:max-w-80', 'cursor-grab',
+      className={cn(
+        'w-full',
+        'break-all',
+        'sm:max-w-52',
+        'md:max-w-56',
+        'lg:max-w-72',
+        'xl:max-w-80',
+        'cursor-grab',
         { 'border-2 border-rose-500 opacity-30': isDragging }
       )}
     >
@@ -45,14 +53,14 @@ export function IssueCard({ issue }: IssueCardProps) {
           </a>
         </CardTitle>
         <p className="text-xs">
-          Opened by {issue?.user?.login} | {issue?.user?.type}
+          Opened by {login} | {type}
         </p>
         <div className=" flex w-1/3 flex-col items-center gap-1">
           <Avatar className="size-8 rounded-full text-muted-foreground md:size-12">
-            <AvatarImage src={issue?.user?.avatar_url} alt="avatar image" />
+            <AvatarImage src={avatar_url} alt="avatar image" />
             <AvatarFallback>{userUrl}</AvatarFallback>
           </Avatar>
-          <p className="text-[10px] font-bold leading-4">{issue?.user?.login}</p>
+          <p className="text-[10px] font-bold leading-4">{login}</p>
         </div>
       </CardHeader>
       <CardContent className="flex flex-col items-center gap-2">
