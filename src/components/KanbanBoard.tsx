@@ -29,7 +29,7 @@ export function KanbanBoard() {
 
   const [activeIssue, setActiveIssue] = useState<Issue | null>(null)
   const [issueList, setIssueList] = useState<Issue[]>([])
-  
+
   const ownerAndRepoInfo = extractOwnerAndRepo(currentRepoUrl)
 
   useEffect(() => {
@@ -93,8 +93,6 @@ export function KanbanBoard() {
     const overId = over.id
 
     if (activeId === overId) return
-
-    
   }
 
   function onDragOver(event: DragOverEvent) {
@@ -130,9 +128,9 @@ export function KanbanBoard() {
       setIssueList((issueList) => {
         const activeIndex = issueList.findIndex((t) => t.id === activeId)
         issueList[activeIndex].status = overId as IssueStatus
-    
+
         return arrayMove(issueList, activeIndex, activeIndex)
       })
-    }   
+    }
   }
 }

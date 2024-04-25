@@ -1,4 +1,3 @@
-
 import { Issue, IssueStatus, ResponseIssue } from '@/types/issues'
 
 export function getTimeStringSinceIssueOpened(createdAt: string): string {

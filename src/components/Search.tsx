@@ -6,12 +6,8 @@ import { useState } from 'react'
 import { BreadCrumbs } from './BreadCrumbs'
 import { extendIssuesWithStatus, validateGithubUrl } from '@/utils'
 import { fetchIssues } from '@/api'
-import { AlertCircle } from "lucide-react"
-import {
-  Alert,
-  AlertDescription,
-  AlertTitle,
-} from "@/components/ui/alert"
+import { AlertCircle } from 'lucide-react'
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 
 export function Search() {
   const currentRepoUrl = useIssuesStore((state) => state.currentRepoUrl)
@@ -23,32 +19,32 @@ export function Search() {
   const [isLoading, setIsLoading] = useState(false)
 
   const handleSubmit = async () => {
-    setError(null);
-    setIsLoading(true);
-  
+    setError(null)
+    setIsLoading(true)
+
     try {
-      const isValidUrl = validateGithubUrl(inputValue);
+      const isValidUrl = validateGithubUrl(inputValue)
       if (!isValidUrl) {
-        throw new Error('Invalid GitHub URL');
+        throw new Error('Invalid GitHub URL')
       }
-  
-      const issues = await fetchIssues(inputValue);
-  
+
+      const issues = await fetchIssues(inputValue)
+
       if (issues?.length === 0) {
-        throw new Error('The list of issues is empty');
+        throw new Error('The list of issues is empty')
       }
-  
-      setInputValue('');
-      setCurrentRepoUrl(inputValue);
-      setIssuesByStore(extendIssuesWithStatus(issues));
+
+      setInputValue('')
+      setCurrentRepoUrl(inputValue)
+      setIssuesByStore(extendIssuesWithStatus(issues))
     } catch (error) {
       if (error instanceof Error) {
-        setError(error.message);
+        setError(error.message)
       } else {
-        setError('An unknown error occurred');
+        setError('An unknown error occurred')
       }
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
   }
 
@@ -70,12 +66,10 @@ export function Search() {
       </div>
       {error && (
         <Alert variant="destructive">
-        <AlertCircle className="h-4 w-4" />
-        <AlertTitle>Error</AlertTitle>
-        <AlertDescription>
-          {error}
-        </AlertDescription>
-      </Alert>
+          <AlertCircle className="h-4 w-4" />
+          <AlertTitle>Error</AlertTitle>
+          <AlertDescription>{error}</AlertDescription>
+        </Alert>
       )}
       <BreadCrumbs currentRepoUrl={currentRepoUrl} />
     </>

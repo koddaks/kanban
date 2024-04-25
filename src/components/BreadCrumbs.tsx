@@ -18,7 +18,7 @@ import { ChevronDown, Link as LinkIcon, Slash } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { Button } from './ui/button'
 
-export function BreadCrumbs({ currentRepoUrl }: { currentRepoUrl: string }) {  
+export function BreadCrumbs({ currentRepoUrl }: { currentRepoUrl: string }) {
   const setCurrentRepoUrl = useIssuesStore((state) => state.setCurrentRepoUrl)
   const [activeOwner, setActiveOwner] = useState<string>('')
   const [activeRepo, setActiveRepo] = useState<string>('')
@@ -104,24 +104,28 @@ export function BreadCrumbs({ currentRepoUrl }: { currentRepoUrl: string }) {
                 </DropdownMenuContent>
               </DropdownMenu>
             </BreadcrumbItem>
-          ) : 'repo'}
+          ) : (
+            'repo'
+          )}
         </BreadcrumbList>
       </Breadcrumb>
 
-     { currentRepoUrl && <div className="flex w-1/3 flex-row gap-2">
-        <Button variant="link" className="h-6 w-1/2" asChild>
-          <a className="flex gap-1" href={currentRepoInfo?.ownerUrl} target="_blank">
-            <p>{currentRepoInfo?.owner}</p>
-            <LinkIcon size={16}/>
-          </a>
-        </Button>
-        <Button variant="link" className="h-6 w-1/2" asChild>
-          <a className="flex gap-1" href={currentRepoInfo?.repoUrl} target="_blank">
-            <p>{currentRepoInfo?.repo}</p>
-            <LinkIcon size={16}/>
-          </a>
-        </Button>
-      </div>}
+      {currentRepoUrl && (
+        <div className="flex w-1/3 flex-row gap-2">
+          <Button variant="link" className="h-6 w-1/2" asChild>
+            <a className="flex gap-1" href={currentRepoInfo?.ownerUrl} target="_blank">
+              <p>{currentRepoInfo?.owner}</p>
+              <LinkIcon size={16} />
+            </a>
+          </Button>
+          <Button variant="link" className="h-6 w-1/2" asChild>
+            <a className="flex gap-1" href={currentRepoInfo?.repoUrl} target="_blank">
+              <p>{currentRepoInfo?.repo}</p>
+              <LinkIcon size={16} />
+            </a>
+          </Button>
+        </div>
+      )}
     </div>
   )
 }

@@ -24,7 +24,7 @@ const useIssuesStore = create<IssuesStore>()(
         repoList: [],
         async setIssuesByStore(issues) {
           const { issuesByStore, currentRepoUrl } = get()
-        
+
           set({
             currentRepoUrl: currentRepoUrl,
             issuesByStore: {

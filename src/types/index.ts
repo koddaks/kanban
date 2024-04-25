@@ -6,8 +6,8 @@ export type Column = {
 }
 
 export interface RepoInfo {
-  owner: string;
+  owner: string
   ownerUrl: string
-  repo: string;
-  repoUrl: string;
+  repo: string
+  repoUrl: string
 }
