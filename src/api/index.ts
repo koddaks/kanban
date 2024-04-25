@@ -19,9 +19,17 @@ export const fetchIssues = async (repoUrl: string) => {
     if (!response.ok) {
       throw new Error('Network response was not ok')
     }
+
     const data: ResponseIssue[] = await response.json()
+
+    if (!data) {
+      throw new Error('Issues not found')
+    }
+
     return data
+
   } catch (error) {
-    console.error('Error fetching data:', error)
+    return []
+    // console.error('Error fetching data:', error)
   }
 }

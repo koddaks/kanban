@@ -30,6 +30,10 @@ export function extendIssuesWithStatus(issues: ResponseIssue[]): Issue[] {
   })
 }
 
+export function validateGithubUrl(repoUrl: string) {
+  return repoUrl.startsWith('https://github.com/') || repoUrl.startsWith('http://github.com')
+}
+
 export function extractOwnerAndRepo(url: string) {
   const regex = /github\.com\/([^/]+)\/([^/]+)/
   const matches = url.match(regex)

@@ -1,16 +1,14 @@
 import { RepoInfo } from '@/types'
 import { create } from 'zustand'
 import { devtools, persist } from 'zustand/middleware'
-import { extendIssuesWithStatus } from '@/utils'
-import { fetchIssues } from '@/api'
 import { Issue } from '@/types/issues'
 
 interface IssuesStore {
-  fetchIssues: (repoUrl: string) => Promise<void>
   currentRepoUrl: string
   issuesByStore: {
     [repoUrl: string]: Issue[]
   }
+  setIssuesByStore: (issues: Issue[]) => void
   setCurrentRepoUrl: (url: string) => void
   repoList: RepoInfo[]
   setRepoToRepoList: (repoInfo: RepoInfo) => void
@@ -24,27 +22,20 @@ const useIssuesStore = create<IssuesStore>()(
         issuesByStore: {},
         currentRepoUrl: '',
         repoList: [],
-        async fetchIssues(repoUrl: string) {
-          const { issuesByStore } = get()
-
-          const data = await fetchIssues(repoUrl)
-
-          if (!data) return
-      
-
-          const issuesWithStatus = extendIssuesWithStatus(data)
-
+        async setIssuesByStore(issues) {
+          const { issuesByStore, currentRepoUrl } = get()
+        
           set({
-            currentRepoUrl: repoUrl,
+            currentRepoUrl: currentRepoUrl,
             issuesByStore: {
               ...issuesByStore,
-              [repoUrl]: issuesWithStatus,
+              [currentRepoUrl]: issues,
             },
           })
         },
         setIssuesForRepo: (issues) => {
           const { issuesByStore, currentRepoUrl } = get()
-          set({            
+          set({
             issuesByStore: {
               ...issuesByStore,
               [currentRepoUrl]: issues,
