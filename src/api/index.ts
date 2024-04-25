@@ -16,20 +16,16 @@ export const fetchIssues = async (repoUrl: string) => {
         accept: 'application/vnd.github+json',
       },
     })
+
     if (!response.ok) {
       throw new Error('Network response was not ok')
     }
-
+ 
     const data: ResponseIssue[] = await response.json()
-
-    if (!data) {
-      throw new Error('Issues not found')
-    }
 
     return data
 
   } catch (error) {
-    return []
-    // console.error('Error fetching data:', error)
+    console.error('Error fetching data:', error)
   }
 }

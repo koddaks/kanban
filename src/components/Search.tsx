@@ -30,8 +30,15 @@ export function Search() {
 
     const data = await fetchIssues(inputValue)    
 
-    if (data.length === 0) {
+  if (!data) {
       setError("The network's response was out of order. Check that the entered data is correct")
+      setIsLoading(false)
+      return
+    }
+
+    if (data.length === 0) {
+      setError("The list of issues is empty")
+      setInputValue('')
       setIsLoading(false)
       return
     }
