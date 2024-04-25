@@ -2,11 +2,16 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Loader2 } from 'lucide-react'
 import useIssuesStore from '@/store'
-
 import { useState } from 'react'
 import { BreadCrumbs } from './BreadCrumbs'
 import { extendIssuesWithStatus, validateGithubUrl } from '@/utils'
 import { fetchIssues } from '@/api'
+import { AlertCircle } from "lucide-react"
+import {
+  Alert,
+  AlertDescription,
+  AlertTitle,
+} from "@/components/ui/alert"
 
 export function Search() {
   const currentRepoUrl = useIssuesStore((state) => state.currentRepoUrl)
@@ -68,7 +73,15 @@ export function Search() {
           Load issues
         </Button>
       </div>
-      {error && <div>{error}</div>}
+      {error && (
+        <Alert variant="destructive">
+        <AlertCircle className="h-4 w-4" />
+        <AlertTitle>Error</AlertTitle>
+        <AlertDescription>
+          {error}
+        </AlertDescription>
+      </Alert>
+      )}
       <BreadCrumbs currentRepoUrl={currentRepoUrl} />
     </>
   )
