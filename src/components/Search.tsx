@@ -36,7 +36,7 @@ export function Search() {
 
       setInputValue('')
       setCurrentRepoUrl(inputValue)
-      setIssuesForRepo(extendIssuesWithStatus(issues)) 
+      setIssuesForRepo(extendIssuesWithStatus(issues))
     } catch (error) {
       if (error instanceof Error) {
         setError(error.message)

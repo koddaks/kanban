@@ -29,7 +29,7 @@ const useIssuesStore = create<IssuesStore>()(
               },
             })
           }
-        },       
+        },
         setCurrentRepoUrl: (url) => {
           set(() => ({
             currentRepoUrl: url,

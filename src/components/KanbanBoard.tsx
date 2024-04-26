@@ -23,12 +23,11 @@ import { Issue, IssueStatus } from '@/types/issues'
 const columnsId = KANBAN_COLUMNS.map((col) => col.id)
 
 export function KanbanBoard() {
-  const setIssuesForRepo = useIssuesStore((state) => state.setIssuesForRepo) 
+  const setIssuesForRepo = useIssuesStore((state) => state.setIssuesForRepo)
   const currentRepoUrl = useIssuesStore((state) => state.currentRepoUrl)
   const issuesByStore = useIssuesStore((state) => state.issuesByStore)
   const [activeIssue, setActiveIssue] = useState<Issue | null>(null)
   const [issueList, setIssueList] = useState<Issue[]>([])
- 
 
   useEffect(() => {
     if (currentRepoUrl) {

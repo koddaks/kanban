@@ -20,12 +20,10 @@ import { RepoInfo } from '@/types'
 
 export function BreadCrumbs({ currentRepoUrl }: { currentRepoUrl: string }) {
   const issueList = useIssuesStore((state) => state.issuesByStore)
-  const setCurrentRepoUrl = useIssuesStore((state) => state.setCurrentRepoUrl) 
+  const setCurrentRepoUrl = useIssuesStore((state) => state.setCurrentRepoUrl)
   const currentRepoInfo = extractOwnerAndRepo(currentRepoUrl)
   const repoList = Object.keys(issueList).map((repoUrl) => extractOwnerAndRepo(repoUrl))
   const issuesByOwner = createIssuesByOwner(repoList as RepoInfo[])
-
-
 
   const handleSetCurrentRepo = (selectedOwner: string, selectedRepo: string) => {
     const repoInfo = issuesByOwner[selectedOwner]?.[selectedRepo]
