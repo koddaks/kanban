@@ -71,7 +71,7 @@ export function Search() {
           <AlertDescription>{error}</AlertDescription>
         </Alert>
       )}
-      <BreadCrumbs currentRepoUrl={currentRepoUrl} />
+      {currentRepoUrl  && <BreadCrumbs currentRepoUrl={currentRepoUrl} />}
     </>
   )
 }
