@@ -10,7 +10,7 @@ import {
   useSensor,
   useSensors,
 } from '@dnd-kit/core'
-import {coordinateGetter} from './multipleContainersKeyboardCoordinates';
+import {coordinateGetter} from '../lib/multipleContainersKeyboardCoordinates';
 import { SortableContext, arrayMove } from '@dnd-kit/sortable'
 import { createPortal } from 'react-dom'
 import { ColumnContainer } from './ColumnContainer'
