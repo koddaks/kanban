@@ -57,13 +57,17 @@ export function modifyUrlToApiUrl(originalUrl: string) {
   return originalUrl.replace(/github\.com/, 'api.github.com/repos')
 }
 
-
-export function createIssuesByOwner(repoList: RepoInfo[]): Record<string, Record<string, RepoInfo>> {
-  return repoList.reduce((acc, repo) => {
-    if (!acc[repo.owner]) {
-      acc[repo.owner] = {};
-    }
-    acc[repo.owner][repo.repo] = repo;
-    return acc;
-  }, {} as Record<string, Record<string, RepoInfo>>);
+export function createIssuesByOwner(
+  repoList: RepoInfo[]
+): Record<string, Record<string, RepoInfo>> {
+  return repoList.reduce(
+    (acc, repo) => {
+      if (!acc[repo.owner]) {
+        acc[repo.owner] = {}
+      }
+      acc[repo.owner][repo.repo] = repo
+      return acc
+    },
+    {} as Record<string, Record<string, RepoInfo>>
+  )
 }
