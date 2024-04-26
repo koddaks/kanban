@@ -6,9 +6,11 @@ import {
   DragOverlay,
   DragStartEvent,
   PointerSensor,
+  KeyboardSensor, 
   useSensor,
   useSensors,
 } from '@dnd-kit/core'
+import {coordinateGetter} from './multipleContainersKeyboardCoordinates';
 import { SortableContext, arrayMove } from '@dnd-kit/sortable'
 import { createPortal } from 'react-dom'
 import { ColumnContainer } from './ColumnContainer'
@@ -46,7 +48,10 @@ export function KanbanBoard() {
     useSensor(PointerSensor, {
       activationConstraint: {
         distance: 10,
-      },
+      },          
+    }),
+    useSensor(KeyboardSensor, {
+      coordinateGetter,
     })
   )
 
