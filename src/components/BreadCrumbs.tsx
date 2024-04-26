@@ -18,13 +18,13 @@ import { ChevronDown, Link as LinkIcon, Slash } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { Button } from './ui/button'
 
-export function BreadCrumbs({ currentRepoUrl }: { currentRepoUrl: string }) {
+export function BreadCrumbs({ currentRepoUrl }: { currentRepoUrl: string | null }) {
   const setCurrentRepoUrl = useIssuesStore((state) => state.setCurrentRepoUrl)
   const [activeOwner, setActiveOwner] = useState<string>('')
   const [activeRepo, setActiveRepo] = useState<string>('')
 
   const repoList = useIssuesStore((state) => state.repoList)
-  const currentRepoInfo = extractOwnerAndRepo(currentRepoUrl)
+  const currentRepoInfo = extractOwnerAndRepo(currentRepoUrl || '')
 
   useEffect(() => {
     if (currentRepoInfo) {
@@ -64,7 +64,7 @@ export function BreadCrumbs({ currentRepoUrl }: { currentRepoUrl: string }) {
         <BreadcrumbList>
           <BreadcrumbItem>
             <DropdownMenu>
-              <DropdownMenuTrigger type="button" className="flex items-center gap-1">
+              <DropdownMenuTrigger disabled={!currentRepoUrl} type="button" className="flex items-center gap-1">
                 {currentRepoUrl ? activeOwner : 'owner'}
                 <ChevronDown className="h-4 w-4" />
               </DropdownMenuTrigger>
