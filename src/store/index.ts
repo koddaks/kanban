@@ -1,4 +1,4 @@
-import { RepoInfo } from '@/types'
+// import { RepoInfo } from '@/types'
 import { create } from 'zustand'
 import { devtools, persist } from 'zustand/middleware'
 import { Issue } from '@/types/issues'
@@ -9,8 +9,6 @@ interface IssuesStore {
     [repoUrl: string]: Issue[]
   }
   setCurrentRepoUrl: (url: string) => void
-  repoList: RepoInfo[]
-  setRepoToRepoList: (repoInfo: RepoInfo) => void
   setIssuesForRepo: (issues: Issue[]) => void
 }
 
@@ -31,14 +29,7 @@ const useIssuesStore = create<IssuesStore>()(
               },
             })
           }
-        },
-        setRepoToRepoList: (repoInfo) => {
-          if (!get().repoList.some((r) => r.repoUrl === repoInfo.repoUrl)) {
-            set((state) => ({
-              repoList: [...state.repoList, repoInfo],
-            }))
-          }
-        },
+        },       
         setCurrentRepoUrl: (url) => {
           set(() => ({
             currentRepoUrl: url,
