@@ -64,7 +64,11 @@ export function BreadCrumbs({ currentRepoUrl }: { currentRepoUrl: string | null 
         <BreadcrumbList>
           <BreadcrumbItem>
             <DropdownMenu>
-              <DropdownMenuTrigger disabled={!currentRepoUrl} type="button" className="flex items-center gap-1">
+              <DropdownMenuTrigger
+                disabled={!currentRepoUrl}
+                type="button"
+                className="flex items-center gap-1"
+              >
                 {currentRepoUrl ? activeOwner : 'owner'}
                 <ChevronDown className="h-4 w-4" />
               </DropdownMenuTrigger>

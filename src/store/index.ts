@@ -7,7 +7,7 @@ interface IssuesStore {
   currentRepoUrl: string | null
   issuesByStore: {
     [repoUrl: string]: Issue[]
-  } 
+  }
   setCurrentRepoUrl: (url: string) => void
   repoList: RepoInfo[]
   setRepoToRepoList: (repoInfo: RepoInfo) => void
@@ -20,7 +20,7 @@ const useIssuesStore = create<IssuesStore>()(
       (set, get) => ({
         issuesByStore: {},
         currentRepoUrl: null,
-        repoList: [],    
+        repoList: [],
         setIssuesForRepo: (issues) => {
           const { issuesByStore, currentRepoUrl } = get()
           if (currentRepoUrl) {
@@ -30,7 +30,7 @@ const useIssuesStore = create<IssuesStore>()(
                 [currentRepoUrl]: issues,
               },
             })
-          }       
+          }
         },
         setRepoToRepoList: (repoInfo) => {
           if (!get().repoList.some((r) => r.repoUrl === repoInfo.repoUrl)) {
