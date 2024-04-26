@@ -32,7 +32,7 @@ export function KanbanBoard() {
   const [activeIssue, setActiveIssue] = useState<Issue | null>(null)
   const [issueList, setIssueList] = useState<Issue[]>([])
 
-  const ownerAndRepoInfo = extractOwnerAndRepo(currentRepoUrl)
+  const ownerAndRepoInfo = extractOwnerAndRepo(currentRepoUrl || '')
 
   useEffect(() => {
     if (ownerAndRepoInfo) {
@@ -41,7 +41,11 @@ export function KanbanBoard() {
   }, [currentRepoUrl])
 
   useEffect(() => {
-    setIssueList(issuesByStore[currentRepoUrl] || [])
+    if (currentRepoUrl) {
+      setIssueList(issuesByStore[currentRepoUrl])
+    } else {
+      setIssueList([])
+    }
   }, [currentRepoUrl, issuesByStore])
 
   const sensors = useSensors(

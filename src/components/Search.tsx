@@ -12,7 +12,7 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 export function Search() {
   const currentRepoUrl = useIssuesStore((state) => state.currentRepoUrl)
   const setCurrentRepoUrl = useIssuesStore((state) => state.setCurrentRepoUrl)
-  const setIssuesByStore = useIssuesStore((state) => state.setIssuesByStore)
+  const setIssuesForRepo = useIssuesStore((state) => state.setIssuesForRepo)
 
   const [inputValue, setInputValue] = useState('')
   const [error, setError] = useState<string | null>(null)
@@ -36,7 +36,7 @@ export function Search() {
 
       setInputValue('')
       setCurrentRepoUrl(inputValue)
-      setIssuesByStore(extendIssuesWithStatus(issues))
+      setIssuesForRepo(extendIssuesWithStatus(issues))
     } catch (error) {
       if (error instanceof Error) {
         setError(error.message)

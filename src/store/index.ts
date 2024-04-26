@@ -4,11 +4,10 @@ import { devtools, persist } from 'zustand/middleware'
 import { Issue } from '@/types/issues'
 
 interface IssuesStore {
-  currentRepoUrl: string
+  currentRepoUrl: string | null
   issuesByStore: {
     [repoUrl: string]: Issue[]
-  }
-  setIssuesByStore: (issues: Issue[]) => void
+  } 
   setCurrentRepoUrl: (url: string) => void
   repoList: RepoInfo[]
   setRepoToRepoList: (repoInfo: RepoInfo) => void
@@ -20,27 +19,18 @@ const useIssuesStore = create<IssuesStore>()(
     persist(
       (set, get) => ({
         issuesByStore: {},
-        currentRepoUrl: '',
-        repoList: [],
-        async setIssuesByStore(issues) {
-          const { issuesByStore, currentRepoUrl } = get()
-
-          set({
-            currentRepoUrl: currentRepoUrl,
-            issuesByStore: {
-              ...issuesByStore,
-              [currentRepoUrl]: issues,
-            },
-          })
-        },
+        currentRepoUrl: null,
+        repoList: [],    
         setIssuesForRepo: (issues) => {
           const { issuesByStore, currentRepoUrl } = get()
-          set({
-            issuesByStore: {
-              ...issuesByStore,
-              [currentRepoUrl]: issues,
-            },
-          })
+          if (currentRepoUrl) {
+            set({
+              issuesByStore: {
+                ...issuesByStore,
+                [currentRepoUrl]: issues,
+              },
+            })
+          }       
         },
         setRepoToRepoList: (repoInfo) => {
           if (!get().repoList.some((r) => r.repoUrl === repoInfo.repoUrl)) {
