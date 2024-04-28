@@ -35,6 +35,12 @@ const useIssuesStore = create<IssuesStore>()(
             currentRepoUrl: url,
           }))
         },
+        setCurrentRepoUrl: (url) => {          
+          set(() => ({
+            currentRepoUrl: url
+          }))
+        }
+        
       }),
       { name: 'repository-issues' }
     )
