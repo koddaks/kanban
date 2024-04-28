@@ -1,9 +1,3 @@
-export enum IssueGetState {
-  All = 'all',
-  Open = 'open',
-  Closed = 'closed',
-}
-
 export type Id = string | number
 
 export type Column = {
@@ -13,8 +7,7 @@ export type Column = {
 
 export interface RepoInfo {
   owner: string
+  ownerUrl: string
   repo: string
-  url: string
+  repoUrl: string
 }
-
-
