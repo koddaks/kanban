@@ -4,7 +4,7 @@ export const KANBAN_COLUMNS = [
     title: 'Todo',
   },
   {
-    id: 'doing',
+    id: 'in-progress',
     title: 'Work in progress',
   },
   {

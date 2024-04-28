@@ -1,12 +1,10 @@
-import { BreadCrumbs } from '@/components/BreadCrumbs'
-import { InputWithButton } from '@/components/InputWithButton'
+import { Search } from '@/components/Search'
 import { KanbanBoard } from '@/components/KanbanBoard'
 
 export function Main() {
   return (
-    <main className="flex flex-col gap-2">
-      <InputWithButton />
-      <BreadCrumbs />
+    <main className="container flex max-w-5xl flex-col gap-2 pt-5">
+      <Search />
       <KanbanBoard />
     </main>
   )

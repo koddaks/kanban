@@ -1,71 +1,40 @@
-import { Issue, RepoInfo } from '@/types'
+// import { RepoInfo } from '@/types'
 import { create } from 'zustand'
 import { devtools, persist } from 'zustand/middleware'
-import { getAllRepositoryIssues } from './api'
-import { sortIssuesByColumn } from '@/utils'
+import { Issue } from '@/types/issues'
 
-interface IssuesState {
-  getIssues: (repoUrl: string) => Promise<void>
-  currentRepoUrl: string 
+interface IssuesStore {
+  currentRepoUrl: string | null
   issuesByStore: {
     [repoUrl: string]: Issue[]
   }
   setCurrentRepoUrl: (url: string) => void
-  repoList: RepoInfo[];
-  addRepo: (repoInfo: RepoInfo) => void;
+  setIssuesForRepo: (issues: Issue[]) => void
 }
 
-const useIssuesStore = create<IssuesState>()(
+const useIssuesStore = create<IssuesStore>()(
   devtools(
     persist(
       (set, get) => ({
         issuesByStore: {},
-        currentRepoUrl: '', 
-        repoList: [],       
-        async getIssues(repoUrl: string) {
-          const { issuesByStore } = get()
-
-          if (issuesByStore[repoUrl] && issuesByStore[repoUrl].length != 0) {
+        currentRepoUrl: null,
+        repoList: [],
+        setIssuesForRepo: (issues) => {
+          const { issuesByStore, currentRepoUrl } = get()
+          if (currentRepoUrl) {
             set({
-              currentRepoUrl: repoUrl,
               issuesByStore: {
                 ...issuesByStore,
+                [currentRepoUrl]: issues,
               },
             })
-            return
-          }
-
-          const data = await getAllRepositoryIssues(repoUrl)
-
-          if (!data) return
-
-          const todoIssues: Issue[] = sortIssuesByColumn(data, 'todo')
-          const doingIssues: Issue[] = sortIssuesByColumn(data, 'doing')
-          const doneIssues: Issue[] = sortIssuesByColumn(data, 'done')
-
-          const sortedIssues = [...todoIssues, ...doingIssues, ...doneIssues]
-
-          set({
-            currentRepoUrl: repoUrl,
-            issuesByStore: {
-              ...issuesByStore,
-              [repoUrl]: sortedIssues,
-            },
-          })
-        },
-        addRepo: (repoInfo: RepoInfo) => {
-          if (!get().repoList.some(r => r.repoUrl === repoInfo.repoUrl)) {
-            set(state => ({
-              repoList: [...state.repoList, repoInfo]
-            }));
           }
         },
-        setCurrentRepoUrl: (url) => {          
+        setCurrentRepoUrl: (url) => {
           set(() => ({
-            currentRepoUrl: url
+            currentRepoUrl: url,
           }))
-        }
-        
+        },
       }),
       { name: 'repository-issues' }
     )

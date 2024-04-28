@@ -6,49 +6,44 @@ import {
   DragOverlay,
   DragStartEvent,
   PointerSensor,
+  KeyboardSensor,
   useSensor,
   useSensors,
 } from '@dnd-kit/core'
-import { SortableContext, arrayMove } from '@dnd-kit/sortable'
+import { SortableContext, arrayMove, sortableKeyboardCoordinates } from '@dnd-kit/sortable'
 import { createPortal } from 'react-dom'
 import { ColumnContainer } from './ColumnContainer'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import useIssuesStore from '@/store'
 import { IssueCard } from './IssueCard'
-import { Issue, RepoInfo } from '@/types'
-import { extractOwnerAndRepo } from '@/utils'
+
+import { Issue, IssueStatus } from '@/types/issues'
+
+const columnsId = KANBAN_COLUMNS.map((col) => col.id)
 
 export function KanbanBoard() {
+  const setIssuesForRepo = useIssuesStore((state) => state.setIssuesForRepo)
   const currentRepoUrl = useIssuesStore((state) => state.currentRepoUrl)
   const issuesByStore = useIssuesStore((state) => state.issuesByStore)
-
-  const [columns] = useState(KANBAN_COLUMNS)
-  const columnsId = useMemo(() => columns.map((col) => col.id), [columns])
-  const [activeTask, setActiveTask] = useState<Issue | null>(null)
-
+  const [activeIssue, setActiveIssue] = useState<Issue | null>(null)
   const [issueList, setIssueList] = useState<Issue[]>([])
 
-  const addRepo = useIssuesStore((state) => state.addRepo)
-  const ownerAndRepoInfo: RepoInfo | null = extractOwnerAndRepo(currentRepoUrl)
-
-  useEffect(() => {    
-    if(ownerAndRepoInfo) {
-      addRepo(ownerAndRepoInfo)
+  useEffect(() => {
+    if (currentRepoUrl) {
+      setIssueList(issuesByStore[currentRepoUrl])
+    } else {
+      setIssueList([])
     }
-  }, [currentRepoUrl])
-
-
-  useEffect(() => {    
-    setIssueList(issuesByStore[currentRepoUrl] || [])
   }, [currentRepoUrl, issuesByStore])
-
-
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: {
         distance: 10,
       },
+    }),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
     })
   )
 
@@ -59,18 +54,18 @@ export function KanbanBoard() {
         onDragStart={onDragStart}
         onDragEnd={onDragEnd}
         onDragOver={onDragOver}
-      >                  
-            <SortableContext items={columnsId}>
-              {columns.map((col) => (
-                <ColumnContainer
-                  key={col.id}
-                  column={col}
-                  issues={issueList.filter((issue) => issue.columnId === col.id)}
-                />
-              ))}
-            </SortableContext>
+      >
+        <SortableContext items={columnsId}>
+          {KANBAN_COLUMNS.map((col) => (
+            <ColumnContainer
+              key={col.id}
+              column={col}
+              issues={issueList.filter((issue) => issue.status === col.id)}
+            />
+          ))}
+        </SortableContext>
         {createPortal(
-          <DragOverlay>{activeTask && <IssueCard issue={activeTask} />}</DragOverlay>,
+          <DragOverlay>{activeIssue && <IssueCard issue={activeIssue} />}</DragOverlay>,
           document.body
         )}
       </DndContext>
@@ -79,13 +74,14 @@ export function KanbanBoard() {
 
   function onDragStart(event: DragStartEvent) {
     if (event.active.data.current?.type === 'Issue') {
-      setActiveTask(event.active.data.current.issue)
+      setActiveIssue(event.active.data.current.issue)
       return
     }
   }
 
   function onDragEnd(event: DragEndEvent) {
-    setActiveTask(null)
+    setActiveIssue(null)
+    setIssuesForRepo(issueList)
 
     const { active, over } = event
     if (!over) return
@@ -114,8 +110,8 @@ export function KanbanBoard() {
         const activeIndex = issueList.findIndex((t) => t.id === activeId)
         const overIndex = issueList.findIndex((t) => t.id === overId)
 
-        if (issueList[activeIndex].columnId != issueList[overIndex].columnId) {
-          issueList[activeIndex].columnId = issueList[overIndex].columnId
+        if (issueList[activeIndex].status != issueList[overIndex].status) {
+          issueList[activeIndex].status = issueList[overIndex].status
           return arrayMove(issueList, activeIndex, overIndex - 1)
         }
 
@@ -128,9 +124,8 @@ export function KanbanBoard() {
     if (isActiveATask && isOverAColumn) {
       setIssueList((issueList) => {
         const activeIndex = issueList.findIndex((t) => t.id === activeId)
+        issueList[activeIndex].status = overId as IssueStatus
 
-        issueList[activeIndex].columnId = overId
-        console.log('DROPPING ISSUE OVER COLUMN', { activeIndex })
         return arrayMove(issueList, activeIndex, activeIndex)
       })
     }
