@@ -17,8 +17,7 @@ const useIssuesStore = create<IssuesStore>()(
     persist(
       (set, get) => ({
         issuesByStore: {},
-        currentRepoUrl: null,
-        repoList: [],
+        currentRepoUrl: null,       
         setIssuesForRepo: (issues) => {
           const { issuesByStore, currentRepoUrl } = get()
           if (currentRepoUrl) {
