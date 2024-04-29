@@ -66,5 +66,6 @@ describe('Load Issues with GitHub URL', () => {
           .children()
           .should('have.attr', 'data-testid', issueTestId)
       })
-  })  
+    cy.reload()
+  })
 })
