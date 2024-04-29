@@ -1,4 +1,4 @@
-import { defineConfig } from "cypress";
+import { defineConfig } from 'cypress'
 
 export default defineConfig({
   e2e: {
@@ -8,9 +8,11 @@ export default defineConfig({
     baseUrl: 'http://localhost:5173/',
     env: {
       validGithubUrl: 'https://github.com/facebook/react',
-      invalidGithubUrl: 'ttps://github.com/facebook/react/issues',  
+      invalidGithubUrl: 'ttps://github.com/facebook/react/issues',
       invalidRepositoryOrOwnerUrl: 'https://github.com/facesbook/react',
-      repositoryIssuesEmptyUrl: 'https://github.com/koddaks/repository-issues-is-empty',  
+      repositoryIssuesEmptyUrl: 'https://github.com/koddaks/repository-issues-is-empty',
     },
+    experimentalRunAllSpecs: true,
+    
   },
-});
+})
