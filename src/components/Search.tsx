@@ -52,6 +52,7 @@ export function Search() {
     <>
       <div className="flex w-full gap-2">
         <Input
+          data-testid="search-repo-issues-input"
           className="w-4/5"
           type="search"
           name="search-repo-issues"
@@ -59,16 +60,16 @@ export function Search() {
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
         />
-        <Button className="w-1/6" onClick={handleSubmit} type="submit" disabled={isLoading}>
+        <Button data-testid="search-repo-issues-button" className="w-1/6" onClick={handleSubmit} type="submit" disabled={isLoading}>
           {isLoading && <Loader2 className="h-4 w-4 animate-spin" />}
           Load issues
         </Button>
       </div>
       {error && (
-        <Alert variant="destructive">
+        <Alert data-testid="error" variant="destructive">
           <AlertCircle className="h-4 w-4" />
           <AlertTitle>Error</AlertTitle>
-          <AlertDescription>{error}</AlertDescription>
+          <AlertDescription data-testid="error-message">{error}</AlertDescription>
         </Alert>
       )}
       {currentRepoUrl && <BreadCrumbs currentRepoUrl={currentRepoUrl} />}
