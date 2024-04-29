@@ -31,7 +31,7 @@ export function IssueCard({ issue }: IssueCardProps) {
 
   return (
     <Card
-    data-testid={`${issue.id}-issue-card`}
+      data-testid={`${issue.id}-issue-card`}
       ref={setNodeRef}
       style={style}
       {...attributes}

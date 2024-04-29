@@ -74,7 +74,11 @@ export function BreadCrumbs({ currentRepoUrl }: { currentRepoUrl: string }) {
           </BreadcrumbSeparator>
           <BreadcrumbItem>
             <DropdownMenu>
-              <DropdownMenuTrigger data-testid="repo-dropdown-trigger" type="button" className="flex items-center gap-1">
+              <DropdownMenuTrigger
+                data-testid="repo-dropdown-trigger"
+                type="button"
+                className="flex items-center gap-1"
+              >
                 {currentRepoInfo.repo}
                 <ChevronDown className="h-4 w-4" />
               </DropdownMenuTrigger>
@@ -96,13 +100,23 @@ export function BreadCrumbs({ currentRepoUrl }: { currentRepoUrl: string }) {
 
       <div className="flex w-1/3 flex-row gap-2">
         <Button variant="link" className="h-6 w-1/2" asChild>
-          <a data-testid="owner-url" className="flex gap-1" href={currentRepoInfo.ownerUrl} target="_blank">
+          <a
+            data-testid="owner-url"
+            className="flex gap-1"
+            href={currentRepoInfo.ownerUrl}
+            target="_blank"
+          >
             <p>{currentRepoInfo.owner}</p>
             <LinkIcon size={16} />
           </a>
         </Button>
         <Button variant="link" className="h-6 w-1/2" asChild>
-          <a data-testid="repo-url" className="flex gap-1" href={currentRepoInfo.repoUrl} target="_blank">
+          <a
+            data-testid="repo-url"
+            className="flex gap-1"
+            href={currentRepoInfo.repoUrl}
+            target="_blank"
+          >
             <p>{currentRepoInfo.repo}</p>
             <LinkIcon size={16} />
           </a>

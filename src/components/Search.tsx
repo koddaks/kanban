@@ -60,7 +60,13 @@ export function Search() {
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
         />
-        <Button data-testid="search-repo-issues-button" className="w-1/6" onClick={handleSubmit} type="submit" disabled={isLoading}>
+        <Button
+          data-testid="search-repo-issues-button"
+          className="w-1/6"
+          onClick={handleSubmit}
+          type="submit"
+          disabled={isLoading}
+        >
           {isLoading && <Loader2 className="h-4 w-4 animate-spin" />}
           Load issues
         </Button>

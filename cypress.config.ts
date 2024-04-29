@@ -13,6 +13,5 @@ export default defineConfig({
       repositoryIssuesEmptyUrl: 'https://github.com/koddaks/repository-issues-is-empty',
     },
     experimentalRunAllSpecs: true,
-    
   },
 })

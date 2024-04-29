@@ -23,8 +23,11 @@ export function ColumnContainer({ column, issues }: ColumnContainerProps) {
     },
   })
   return (
-    <div ref={setNodeRef} className= "w-1/3">
-      <div data-testid={`${column.id}-column-header`} className="flex items-center justify-center rounded-t-lg bg-slate-600 text-neutral-100">
+    <div ref={setNodeRef} className="w-1/3">
+      <div
+        data-testid={`${column.id}-column-header`}
+        className="flex items-center justify-center rounded-t-lg bg-slate-600 text-neutral-100"
+      >
         {column.title}
       </div>
       <div className="flex w-full flex-col">
