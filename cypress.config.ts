@@ -9,8 +9,8 @@ export default defineConfig({
     env: {
       validGithubUrl: 'https://github.com/facebook/react',
       invalidGithubUrl: 'ttps://github.com/facebook/react/issues',  
-      invalidRepositoryOrOwner: 'https://github.com/facesbook/react',
-      repositoryIssuesEmpty: 'https://github.com/koddaks/repository-issues-is-empty',  
+      invalidRepositoryOrOwnerUrl: 'https://github.com/facesbook/react',
+      repositoryIssuesEmptyUrl: 'https://github.com/koddaks/repository-issues-is-empty',  
     },
   },
 });

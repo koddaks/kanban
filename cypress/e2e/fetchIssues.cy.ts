@@ -10,7 +10,7 @@ describe('Load Issues with GitHub URL', () => {
     cy.get('[data-testid="search-repo-issues-button"]')
       .should('exist')
       .should('to.have.text', 'Load issues')
-    .click()
+      .click()
 
     cy.get('[data-testid="todo-column-header"]').should('exist').should('to.have.text', 'Todo')
     cy.get('[data-testid="in-progress-column-header"]')
@@ -90,8 +90,8 @@ describe('Load Issues with GitHub URL', () => {
 
     cy.get('[data-testid="search-repo-issues-input"]')
       .should('exist')
-      .type(Cypress.env('invalidRepositoryOrOwner'))
-      .should('to.have.value', Cypress.env('invalidRepositoryOrOwner'))
+      .type(Cypress.env('invalidRepositoryOrOwnerUrl'))
+      .should('to.have.value', Cypress.env('invalidRepositoryOrOwnerUrl'))
 
     cy.get('[data-testid="search-repo-issues-button"]')
       .should('exist')
@@ -109,8 +109,8 @@ describe('Load Issues with GitHub URL', () => {
 
     cy.get('[data-testid="search-repo-issues-input"]')
       .should('exist')
-      .type(Cypress.env('repositoryIssuesEmpty'))
-      .should('to.have.value', Cypress.env('repositoryIssuesEmpty'))
+      .type(Cypress.env('repositoryIssuesEmptyUrl'))
+      .should('to.have.value', Cypress.env('repositoryIssuesEmptyUrl'))
 
     cy.get('[data-testid="search-repo-issues-button"]')
       .should('exist')
