@@ -16,7 +16,7 @@ export const fetchIssues = async (repoUrl: string) => {
   })
 
   if (!response.ok) {
-    throw new Error(`Network response was not ok: ${response.status}`)
+    throw new Error(`Network response was not ok: ${response.status}. Check the URL and try again.`)
   }
 
   const data: ResponseIssue[] = await response.json()
