@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "types": ["cypress", "@4tw/cypress-drag-drop"],
+    "types": ["cypress"],
      "baseUrl": ".",
      "paths": {
        "@/*": [
